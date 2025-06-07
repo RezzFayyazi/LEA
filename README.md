@@ -4,8 +4,11 @@ LLM Embedding-based Attribution (LEA): Quantifying Source Contributions to Gener
 ## Overview
 This work proposes LLM Embedding-based Attribution (LEA) -- a novel, explainable metric to paint a clear picture on the `percentage of influence' the pre-trained knowledge vs. retrieved content has for each generated response. We apply LEA to verify that LLM-generated responses for vulnerability analysis are insightful, by showcasing the expected distribution of the responses when applied with verifiable sources, using 100 critical CVEs over a 10-year period.
 
-![Alt text](images/dependency_process.png)
-![Alt text](images/lea_table.png)
+<p align="center">
+  <img src="images/dependency_process.PNG" alt="LEA end‑to‑end pipeline"/>
+</p>
+
+
 
 ## Setup
 Create a virtual environment and install the libraries:
@@ -56,7 +59,6 @@ Essential knobs in **`configs/analysis.yaml`**:
 | `gt_distribution`        | `True` → evaluate RAG response; `False` → evaluate base response |
 | `layer_by_layer_rank`    | Print per‑layer rank statistics                                  |
 | `token_probs_diff_probs` | Plot Δ log‑probs between responses                               |
-
 
 ---
 
