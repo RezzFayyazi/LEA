@@ -1,0 +1,18 @@
+# ───── pipeline ─────
+model_name: "meta-llama/Llama-3.2-3B-Instruct"
+tokenizer_name:
+torch_dtype: "bfloat16"
+device_map: "auto"
+use_auth_token: true
+
+# ───── analysis ─────
+data_row: 8
+threshold: 0.0
+gt_distribution: True
+layer_by_layer_rank: False
+token_probs_diff_probs: False
+stopw: True
+
+# ───── data ─────
+cve_csv: "./data/cve_data.csv"
+llm_results: "./results/meta-llama_Llama-3.2-3B-Instruct_all_data.json"

