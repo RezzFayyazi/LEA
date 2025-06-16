@@ -58,7 +58,7 @@ Essential knobs in **`configs/analysis.yaml`**:
 | `threshold`              | Filter tokens with attribution < τ                               |
 | `gt_distribution`        | `True` → evaluate RAG response; `False` → evaluate base response |
 | `layer_by_layer_rank`    | Print per‑layer rank statistics                                  |
-| `token_probs_diff_probs` | Plot Δ log‑probs between responses                               |
+| `token_probs_diff_probs` | Plot Δ softmax probs between responses                           |
 
 ---
 
