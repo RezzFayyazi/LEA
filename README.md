@@ -2,8 +2,7 @@
 LLM Embedding-based Attribution (LEA): Quantifying Source Contributions to Generative Model's Response for Vulnerability Analysis
 
 ## Overview
-This work proposes LLM Embedding-based Attribution (LEA), an explainable metric to quantify the influence of internal knowledge compared to retrieved content for model-generated responses. We evaluate LEA on 500 critical CVEs disclosed between 2016 and 2025 using three state-of-the-art LLMs. Our development of LEA exposes layer-wise dependence and reveals where context influence is strongest. 
-We verify LEA's effectiveness in modeling the distribution of generated token dependence for vulnerability analysis. Our results demonstrate LEA’s ability to detect clear distinctions between no-retrieval, generic-retrieval, and ideal-retrieval scenarios. LEA offers security analysts with a metric to audit RAG-enhanced workflows, improving the transparent and trustworthy deployment of AI in cybersecurity threat analysis. 
+This work proposes LLM Embedding-based Attribution (LEA), an explainable metric to quantify the influence of internal knowledge compared to the retrieved content for model-generated responses. LEA is evaluated on 500 critical CVEs disclosed between 2016 and 2025 using three state-of-the-art LLMs. The development of LEA exposes layer-wise dependence and reveals where context influence is strongest. LEA offers security analysts with a metric to audit RAG-enhanced workflows, improving the transparent and trustworthy deployment of AI in cybersecurity threat analysis. 
 
 <p align="center">
   <img src="images/dependency_process.PNG" alt="LEA end‑to‑end pipeline"/>
@@ -14,9 +13,9 @@ For each CVE, we considered three distinct retrieval scenarios:
 
 Ideal retrieval: In this scenario, the LLM retrieves only the most relevant and verified information from the NVD website. This scenario serves as a benchmark to evaluate the LEA distribution under optimal retrieval conditions.
 
-Generic retrieval: Here, we assume that the LLM does not have knowledge of the specific CVE and instead returns generalized information about CVEs, as illustrated below \cite{redhat}:
+Generic retrieval: Here, assume that the LLM does not have knowledge of the specific CVE and instead returns generalized information about CVEs, as illustrated below \cite{redhat}:
 
-Failed retrieval: In this scenario, the LLM retrieves incorrect or misleading information, such as details from a non-existent CVE. For example, querying the model about CVE-2027-30066 (which does not exist) typically results in retrieval of CVEs sharing the same numeric suffix from other years.
+Incorrect retrieval: In this scenario, the LLM retrieves incorrect or misleading information, such as details from a non-existent CVE. For example, querying the model about CVE-2027-30066 (which does not exist) typically results in retrieval of CVEs sharing the same numeric suffix from other years.
 
 
 ## Setup
@@ -83,6 +82,12 @@ Generate the scatter plots for the $A^{rag}$ distributions across different RAG 
 
 ```bash
 $ python3 plot_rag_dist.py
+```
+
+Get the ROC curve with the $A^{rag}$ values to find the optimal threshold over the non-retrieval, generic retrieval, and ideal retrieval results:
+
+```bash
+$ python3 roc_analysis.py
 ```
 
 
