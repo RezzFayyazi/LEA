@@ -12,17 +12,17 @@ import matplotlib.pyplot as plt
 from typing import Iterable, Tuple, List, Sequence
 from collections import Counter
 import gc
-from utils import *
 import nltk
 nltk.download('stopwords')
 from nltk.corpus import stopwords
 import string
-
+from datetime import datetime
+import time
 STOP_WORDS = set(stopwords.words("english"))
 STOP_WORDS |= set(string.punctuation)
 STOP_WORDS |= {
     "<<", ">>", "</",    
-    "/>", "\n", "\\n", "\n\n", "-", "RAG", "Response", "/", "`.", ".,", "`/"}
+    "/>", "\n", "\\n", "\n\n", "-", "<<RAG>>", "<</RAG>>", "<<Query>>", "<</Query>>", "<<Response>>", "<<Response>>\n", "/", "`.", ".,", "`/"}
 load_dotenv()
 
 # ------------------------ dataclass configuration -------------------
@@ -55,8 +55,9 @@ class AnalysisArguments:
 
 @dataclass
 class DataArguments:
-    cve_csv: str = "./cve_data.csv"
+    dataset: str = "./cve_data.csv"
     llm_results: str = "./meta-llama_Llama-3.2-3B-Instruct_cve_with_theta.json"
+    llm_results_second: str = "./meta-llama_Llama-3.2-3B-Instruct_cve_with_theta2.json"
 
 # ------------------------ dataclass configuration -------------------
 
@@ -97,7 +98,9 @@ def load_model_tokenizer(pipe_args: PipelineArguments) -> Tuple[nn.Module, AutoT
 
 def build_prompt_x_theta_y(data, data_row, gt_distribution: bool = True):
     """Create the prompt for the model, including the RAG content."""
-    x             = f"{data[data_row]['question']}\n\n"
+    x_placeholder = "<<Query>>\n"
+    x             = f"{data[data_row]['question']}"
+    x_placeholder_2 = "\n<</Query>>\n\n"
     theta_placeholder = "<<RAG>>\n"
     theta         = f"""{data[data_row]['rag_text']}"""
     theta_placeholder_2 = "\n<</RAG>>\n\n"  
@@ -108,12 +111,14 @@ def build_prompt_x_theta_y(data, data_row, gt_distribution: bool = True):
         y_actual      = f"""{data[data_row]['base_response']}"""
     #y_placeholder_2 = "\n<</Response>>"   
 
-    prompt_x_theta_y = "".join([x, theta_placeholder, theta, theta_placeholder_2, y_placeholder, y_actual])
-    print('prompt_x_theta_y:', prompt_x_theta_y)
+    prompt_x_theta_y = "".join([x_placeholder, x, x_placeholder_2, theta_placeholder, theta, theta_placeholder_2, y_placeholder, y_actual])
+    #print('prompt_x_theta_y:', prompt_x_theta_y)
     return prompt_x_theta_y
 
 def build_prompt_x_y(data, data_row, gt_distribution: bool = True):    
-    x             = f"{data[data_row]['question']}\n\n"
+    x_placeholder = "<<Query>>\n"
+    x             = f"{data[data_row]['question']}"
+    x_placeholder_2 = "\n<</Query>>\n\n"
     y_placeholder = "<<Response>>\n" 
     if gt_distribution:
         y_actual      = f"""{data[data_row]['rag_response']}"""
@@ -121,12 +126,14 @@ def build_prompt_x_y(data, data_row, gt_distribution: bool = True):
         y_actual      = f"""{data[data_row]['base_response']}"""
     #y_placeholder_2 = "\n<</Response>>"   
 
-    prompt_x_y = "".join([x, y_placeholder, y_actual])
-    print('prompt_x_y:', prompt_x_y)
+    prompt_x_y = "".join([x_placeholder, x, x_placeholder_2, y_placeholder, y_actual])
+    #print('prompt_x_y:', prompt_x_y)
     return prompt_x_y
 
 def build_prompt_x_irrelevant_theta_y(data, data_row, gt_distribution: bool = True):
-    x             = f"{data[data_row]['question']}\n\n"
+    x_placeholder = "<<Query>>\n"
+    x             = f"{data[data_row]['question']}"
+    x_placeholder_2 = "\n<</Query>>\n\n"
     theta_placeholder = "<<RAG>>\n"
     theta = """CVE, short for Common Vulnerabilities and Exposures, is a list of publicly disclosed computer security flaws. When someone refers to a CVE, they mean a security flaw that's been assigned a CVE ID number."""   
     theta_placeholder_2 = "\n<</RAG>>\n\n"  
@@ -137,18 +144,93 @@ def build_prompt_x_irrelevant_theta_y(data, data_row, gt_distribution: bool = Tr
         y_actual      = f"""{data[data_row]['base_response']}"""
     #y_placeholder_2 = "\n<</Response>>"   
 
-    prompt_x_irrelevant_theta_y = "".join([x, theta_placeholder, theta, theta_placeholder_2, y_placeholder, y_actual])
-    print('prompt_x_irrelevant_theta_y:', prompt_x_irrelevant_theta_y)
+    prompt_x_irrelevant_theta_y = "".join([x_placeholder, x, x_placeholder_2, theta_placeholder, theta, theta_placeholder_2, y_placeholder, y_actual])
+    #print('prompt_x_irrelevant_theta_y:', prompt_x_irrelevant_theta_y)
     return prompt_x_irrelevant_theta_y
+
+def build_prompt_x_no_theta_y(data, data_row, gt_distribution: bool = False):
+    x_placeholder = "<<Query>>\n"
+    x             = f"{data[data_row]['question']}"
+    x_placeholder_2 = "\n<</Query>>\n\n"
+    theta_placeholder = "<<RAG>>\n"
+    theta = """"""   #intentionally empty
+    theta_placeholder_2 = "\n<</RAG>>\n\n"  
+    y_placeholder = "<<Response>>\n"
+    if gt_distribution:
+        y_actual      = f"""{data[data_row]['rag_response']}"""
+    else:
+        y_actual      = f"""{data[data_row]['base_response']}"""
+    #y_placeholder_2 = "\n<</Response>>"   
+
+    prompt_x_no_theta_y = "".join([x_placeholder, x, x_placeholder_2, theta_placeholder, theta, theta_placeholder_2, y_placeholder, y_actual])
+    #print('prompt_x_no_theta_y:', prompt_x_no_theta_y)
+    return prompt_x_no_theta_y
+
+
+def build_prompt_x_theta_different_y(data, data2, data_row, gt_distribution: bool = True):
+    """Create the prompt for the model, including the RAG content."""
+    x_placeholder = "<<Query>>\n"
+    x             = f"{data[data_row]['question']}"
+    x_placeholder_2 = "\n<</Query>>\n\n"
+    theta_placeholder = "<<RAG>>\n"
+    theta         = f"""{data[data_row]['rag_text']}"""
+    theta_placeholder_2 = "\n<</RAG>>\n\n"  
+    y_placeholder = "<<Response>>\n"
+    if gt_distribution:
+        y_actual      = f"""{data2[data_row]['rag_response']}"""
+    else:
+        y_actual      = f"""{data2[data_row]['base_response']}"""
+    #y_placeholder_2 = "\n<</Response>>"   
+
+    prompt_x_theta_different_y = "".join([x_placeholder, x, x_placeholder_2, theta_placeholder, theta, theta_placeholder_2, y_placeholder, y_actual])
+    print("prompt_x_theta_different_y:", prompt_x_theta_different_y)
+    #print('prompt_x_theta_y:', prompt_x_theta_y)
+    return prompt_x_theta_different_y
+
+def build_prompt_x_different_y(data, data2, data_row, gt_distribution: bool = True):    
+    x_placeholder = "<<Query>>\n"
+    x             = f"{data[data_row]['question']}"
+    x_placeholder_2 = "\n<</Query>>\n\n"
+    y_placeholder = "<<Response>>\n" 
+    if gt_distribution:
+        y_actual      = f"""{data2[data_row]['rag_response']}"""
+    else:
+        y_actual      = f"""{data2[data_row]['base_response']}"""
+    #y_placeholder_2 = "\n<</Response>>"   
+
+    prompt_x_different_y = "".join([x_placeholder, x, x_placeholder_2, y_placeholder, y_actual])
+    print('prompt_x_different_y:', prompt_x_different_y)
+    return prompt_x_different_y
+
+def build_prompt_x_differnet_theta_y(data, data2, data_row, gt_distribution: bool = True):
+    """Create the prompt for the model, including the RAG content."""
+    x_placeholder = "<<Query>>\n"
+    x             = f"{data[data_row]['question']}"
+    x_placeholder_2 = "\n<</Query>>\n\n"
+    theta_placeholder = "<<RAG>>\n"
+    theta         = f"""{data2[data_row]['rag_text']}"""
+    theta_placeholder_2 = "\n<</RAG>>\n\n"  
+    y_placeholder = "<<Response>>\n"
+    if gt_distribution:
+        y_actual      = f"""{data[data_row]['rag_response']}"""
+    else:
+        y_actual      = f"""{data[data_row]['base_response']}"""
+    #y_placeholder_2 = "\n<</Response>>"   
+
+    prompt_x_theta_y = "".join([x_placeholder, x, x_placeholder_2, theta_placeholder, theta, theta_placeholder_2, y_placeholder, y_actual])
+    #print('prompt_x_theta_y:', prompt_x_theta_y)
+    return prompt_x_theta_y
 
 def build_prompt_x_theta(data, data_row):
     """Create the prompt for the model, including the RAG content."""
-    x             = f"{data[data_row]['question']}\n\n"
+    x_placeholder = "<<Query>>\n"
+    x             = f"{data[data_row]['question']}"
+    x_placeholder_2 = "\n<</Query>>\n\n"
     theta_placeholder = "<<RAG>>\n" 
     theta         = f"""{data[data_row]['rag_text']}"""
     theta_placeholder_2 = "\n<</RAG>>\n\n"  
     y_placeholder = "<<Response>>\n"
-    prompt_x_theta = "".join([x, theta_placeholder, theta, theta_placeholder_2, y_placeholder])
+    prompt_x_theta = "".join([x_placeholder, x, x_placeholder_2, theta_placeholder, theta, theta_placeholder_2, y_placeholder])
     return prompt_x_theta
 
 def compute_logits(
@@ -329,7 +411,9 @@ def filter_valid_indices(seq_len: int, indices: Iterable[int]) -> torch.Tensor:
     """Keep only indices in the inclusive range [0, seq_len-1]."""
     idx = torch.tensor([i for i in indices if 0 <= i < seq_len], dtype=torch.long)
     if idx.numel() == 0:
-        raise ValueError("No valid indices survived the range check.")
+        print("No valid indices survived the range check.")
+        return torch.tensor([-1], dtype=torch.long)
+        
     return idx
 
 
@@ -393,7 +477,7 @@ def run_analysis(
     ) = get_token_scores_after_placeholder(model, tokenizer, prompt_x_y)
 
     if token_probs_diff_probs:
-        plot_token_probs(toks_xty, [probs_xty.cpu().float().tolist(), probs_xy.cpu().float().tolist()], labels=["probs_x_theta_y", "probs_x_y"], output_dir="./figures", title=f"Token Probability Differences")
+        plot_token_probs(toks_xty, [probs_xty.cpu().float().tolist(), probs_xy.cpu().float().tolist()], labels=["w/ RAG", "w/o RAG"], output_dir="./figures", title=f"Token Probability Differences")
 
 
     big_rows, xy_rows, delta_logs = detect_significant_diffs(
@@ -446,26 +530,65 @@ def run_analysis(
     }
 
 
-def plot_token_probs(token_strings, probs_list, labels=None, output_dir: str = "./figures", title="Token Probabilities"):
-    
+def plot_token_probs(
+    token_strings: Sequence[str],
+    probs_list: Sequence[Sequence[float]],
+    labels: List[str] = None,
+    output_dir: str = "./figures",
+    title: str = "Token Probabilities",
+) -> None:
+
     if labels is None:
-        labels = [f"run-{i}" for i in range(len(probs_list))]
+        labels = ["w/ RAG", "w/o RAG"] if len(probs_list) == 2 else [f"run-{i+1}" for i in range(len(probs_list))]
 
-    plt.figure(figsize=(24, 4))
-    for p, lab in zip(probs_list, labels):
-        plt.plot(range(len(token_strings)), p, marker='o', label=lab)
+    # ——— Visual style tuned for publication quality ———
+    plt.style.use("seaborn-v0_8-whitegrid")  # clean grid without colour‑override
 
-    plt.xticks(range(len(token_strings)), token_strings, rotation=90)
-    plt.ylabel("Probability")
-    plt.xlabel("Token")
-    plt.title(title)
-    plt.grid(True, which='both', linestyle='--', linewidth=0.5)
-    plt.legend()
-    plt.tight_layout()
-    plt.show()
-    fname = os.path.join(output_dir, f"{title}.png")
-    plt.savefig(fname)
-    plt.close()
+    plt.rcParams.update({
+        "figure.dpi": 300,        # crisp rasterisation for paper
+        "font.family": "serif",   # LaTeX‑friendly default
+        "font.size": 12,
+        "axes.titlesize": 14,
+        "axes.labelsize": 12,
+        "xtick.labelsize": 10,
+        "ytick.labelsize": 10,
+        "legend.fontsize": 11,
+        "axes.grid": True,
+        "grid.linestyle": "--",
+        "grid.linewidth": 0.5,
+    })
+
+    # Width scales with sequence length ➜ avoids overcrowding labels
+    fig_width = max(6, len(token_strings) * 0.35)  # inches
+    fig, ax = plt.subplots(figsize=(fig_width, 4))
+
+    for probs, lab in zip(probs_list, labels):
+        ax.plot(
+            range(len(token_strings)),
+            probs,
+            marker="o",
+            markersize=4,
+            linewidth=1.6,
+            label=lab,
+        )
+
+    ax.set_xticks(range(len(token_strings)))
+    ax.set_xticklabels(token_strings, rotation=90)
+    ax.set_ylim(0, 1.05)
+    ax.set_ylabel("Probability")
+    ax.set_xlabel("Response Tokens")
+    ax.set_title(title, pad=12)
+    ax.legend(frameon=True, loc="upper right")
+
+    fig.tight_layout()
+
+    # ——— Save @ 300 DPI for print quality ———
+    os.makedirs(output_dir, exist_ok=True)
+    filename = os.path.join(output_dir, f"{title.replace(' ', '_')}.png")
+    fig.savefig(filename, bbox_inches="tight")
+    plt.close(fig)
+
+    print(f"Saved figure to → {filename}")
 
 
 def layer_by_layer_rank_func(prompt_x_theta_y: str,
@@ -494,11 +617,15 @@ def _pair_key(pair: Tuple[bool, bool]) -> str:
     return f"xy={xy},x?y={xty}"
 
 
-def analyse_row(row_idx, data, model, tokenizer, prob_threshold, stopw: bool = True, gt_distribution: bool = True, layer_by_layer_rank: bool = False, token_probs_diff_probs: bool = False):
+def analyse_row(row_idx, data, data2, model, tokenizer, prob_threshold, stopw: bool = True, gt_distribution: bool = True, layer_by_layer_rank: bool = False, token_probs_diff_probs: bool = False):
     prompt_x_theta   = build_prompt_x_theta(data, row_idx)
     prompt_x_theta_y = build_prompt_x_theta_y(data, row_idx, gt_distribution)
     prompt_x_y       = build_prompt_x_y(data, row_idx, gt_distribution)
+    prompt_x_no_theta_y = build_prompt_x_no_theta_y(data, row_idx, gt_distribution)
     prompt_x_irre_theta_y = build_prompt_x_irrelevant_theta_y(data, row_idx, gt_distribution)
+    prompt_x_theta_different_y = build_prompt_x_theta_different_y(data, data2, row_idx, gt_distribution)
+    prompt_x_different_y       = build_prompt_x_different_y(data, data2, row_idx, gt_distribution)
+    prompt_x_different_theta_y = build_prompt_x_differnet_theta_y(data, data2, row_idx, gt_distribution)
     torch.cuda.empty_cache()                     # *every* iteration
     gc.collect()
     result = run_analysis(
@@ -548,27 +675,38 @@ def main():
     with open(data_args.llm_results) as f:
         data = json.load(f)
 
+    with open(data_args.llm_results_second) as f:
+        data2 = json.load(f)
     # single-row mode
     if analysis_args.data_row is not None:
         data_row = int(analysis_args.data_row)
         row_json = analyse_row(
-            data_row, data, model, tokenizer, analysis_args.threshold
+            data_row, data, data2, model, tokenizer, analysis_args.threshold, analysis_args.stopw, analysis_args.gt_distribution, analysis_args.layer_by_layer_rank, analysis_args.token_probs_diff_probs
         )
         print(json.dumps({data_row: row_json}, indent=2))
         return
 
     # full-file mode
     all_rows = {
-        row_idx: analyse_row(row_idx, data, model, tokenizer, analysis_args.threshold, analysis_args.stopw, analysis_args.gt_distribution, analysis_args.layer_by_layer_rank, analysis_args.token_probs_diff_probs)
+        row_idx: analyse_row(row_idx, data, data2, model, tokenizer, analysis_args.threshold, analysis_args.stopw, analysis_args.gt_distribution, analysis_args.layer_by_layer_rank, analysis_args.token_probs_diff_probs)
         for row_idx in range(len(data))
     }
-
-    out_path = "independence_results.json"
+    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+    out_path = f"{pipe_args.model_name.replace('/', '_')}_independence_results_{ts}.json"
     with open(out_path, "w") as f:
         json.dump(all_rows, f, indent=2)
 
     print(f"Wrote detailed results to {out_path}")
 
 if __name__ == "__main__":
+    start_time = time.time()
     main()
+    end_time = time.time()
+    runtime = end_time - start_time
+    runtime = int(end_time - start_time)  # total seconds
+
+    hours, remainder = divmod(runtime, 3600)
+    minutes, seconds = divmod(remainder, 60)
+
+    print(f"\nTotal runtime: {hours:02d}:{minutes:02d}:{seconds:02d} (hh:mm:ss)")
     # How to run: python3 main.py configs/analysis.yaml  

@@ -13,7 +13,7 @@ from dotenv import load_dotenv
 from transformers import pipeline, HfArgumentParser
 from langchain_community.document_loaders import WebBaseLoader
 import pandas as pd
-
+import time
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
@@ -154,7 +154,9 @@ def create_rag_response(
         cve_content = cve_content[: rag_args.max_content_length]  
 
     # Create a prompt with the content
-    x             = f"{query}\n\n"
+    x_placeholder = "<<Query>>\n"
+    x             = f"{query}"
+    x_placeholder_2 = "\n<</Query>>\n\n"
     theta_placeholder = "<<RAG>>\n"
     theta         = f"""{cve_content}"""
     theta_placeholder_2 = "\n<</RAG>>\n\n"  
@@ -162,7 +164,7 @@ def create_rag_response(
     y_actual      = """"""
     #y_placeholder_2 = "\n<</Response>>"   
 
-    rag_prompt = "".join([x, theta_placeholder, theta, theta_placeholder_2, y_placeholder, y_actual])
+    rag_prompt = "".join([x_placeholder, x, x_placeholder_2, theta_placeholder, theta, theta_placeholder_2, y_placeholder, y_actual])
     print(rag_prompt)
 
     if pipe_args.model_name.startswith("gpt-"):
@@ -179,11 +181,11 @@ def run_comparison(
     rag_args: RAGArguments,
 ) -> Dict[str, Any]:
 
-    base_response = (
-        get_gpt_response(question, pipe_args, gen_args)
-        if pipe_args.model_name.startswith("gpt-")
-        else get_llm_response(question, pipe_args, gen_args)
-    )
+    #base_response = (
+    #    get_gpt_response(question, pipe_args, gen_args)
+    #    if pipe_args.model_name.startswith("gpt-")
+    #    else get_llm_response(question, pipe_args, gen_args)
+    #)
 
     rag_response = create_rag_response(
         cve_content=rag_text,
@@ -197,7 +199,7 @@ def run_comparison(
         "cve_id": cve_id,
         "question": question,
         "model": pipe_args.model_name,
-        "base_response": base_response,
+        #"base_response": base_response,
         "rag_response": rag_response,
         "rag_text": rag_text,
         "timestamp": datetime.now().isoformat(),
@@ -225,12 +227,15 @@ def parse_pipeline_args(
 def main():
     pipe_args, gen_args, rag_args, data_args = parse_pipeline_args("./configs/generation.yaml")
     df = pd.read_csv(data_args.data, encoding="latin1")
-
+    df = df[14:15]
+    #df = df[270:271]
+    print(df)
     results: List[Dict[str, Any]] = []
     for _, row in df.iterrows():
         cve_id = row["CVE_ID"]
-        rag_text = row.get("RAG", "") or fetch_nvd_data(cve_id)
-        #rag_text = """"CVE, short for Common Vulnerabilities and Exposures, is a list of publicly disclosed computer security flaws. When someone refers to a CVE, they mean a security flaw that's been assigned a CVE ID number."""
+        #rag_text = row.get("RAG", "") or fetch_nvd_data(cve_id)
+        #rag_text = row.get("Matching_Description", "") or fetch_nvd_data(cve_id)
+        rag_text = """"CVE, short for Common Vulnerabilities and Exposures, is a list of publicly disclosed computer security flaws. When someone refers to a CVE, they mean a security flaw that's been assigned a CVE ID number."""
         question = (
             f"You are a cybersecurity expert. How can an attacker exploit {cve_id}? Do not be verbose and answer carefully."
         )
@@ -254,4 +259,14 @@ def main():
 
 
 if __name__ == "__main__":
+    start_time = time.time()
     main()
+    end_time = time.time()
+    runtime = end_time - start_time
+    runtime = int(end_time - start_time)  # total seconds
+
+    hours, remainder = divmod(runtime, 3600)
+    minutes, seconds = divmod(remainder, 60)
+
+    print(f"\nTotal runtime: {hours:02d}:{minutes:02d}:{seconds:02d} (hh:mm:ss)")
+

@@ -1,12 +1,12 @@
 # ───── pipeline ─────
-model_name: "meta-llama/Llama-3.2-3B-Instruct"
+model_name: "google/gemma-3-27b-it"
 tokenizer_name:
 torch_dtype: "bfloat16"
 device_map: "auto"
 use_auth_token: true
 
 # ───── analysis ─────
-data_row: 8
+data_row: 445
 threshold: 0.0
 gt_distribution: True
 layer_by_layer_rank: False
@@ -14,5 +14,6 @@ token_probs_diff_probs: False
 stopw: True
 
 # ───── data ─────
-cve_csv: "./data/cve_data.csv"
-llm_results: "./results/meta-llama_Llama-3.2-3B-Instruct_all_data.json"
+dataset: "./data/critical_cves_2016_2025.csv"
+llm_results: "./results/google_gemma-3-27b-it_main_generation.json"
+llm_results_second: "./results/google_gemma-3-27b-it_wrong_generation.json"

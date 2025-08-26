@@ -2,12 +2,21 @@
 LLM Embedding-based Attribution (LEA): Quantifying Source Contributions to Generative Model's Response for Vulnerability Analysis
 
 ## Overview
-This work proposes LLM Embedding-based Attribution (LEA), an explainable metric to quantify the influence of internal knowledge compared to retrieved content for model-generated responses. We apply LEA to assess responses to 100 critical vulnerabilities from the past decade, verifying its effectiveness in modeling the distribution of generated token independence for vulnerability analysis. Our development of LEA reveals a progression in the independence of hidden states in LLMs, which leads to trace back to early layers (specifically layer-0) for the derivation of LEA, where context dependence is strongest. LEA further reveals that LLMs display structured generalization rather than simple memorization, particularly when generating responses involving vulnerability identifiers (CVE-IDs). LEA offers security analysts with a metric to audit RAG-enhanced workflows, improving the transparent and trustworthy deployment of AI in cybersecurity threat analysis. 
+This work proposes LLM Embedding-based Attribution (LEA), an explainable metric to quantify the influence of internal knowledge compared to retrieved content for model-generated responses. We evaluate LEA on 500 critical CVEs disclosed between 2016 and 2025 using three state-of-the-art LLMs. Our development of LEA exposes layer-wise dependence and reveals where context influence is strongest. 
+We verify LEA's effectiveness in modeling the distribution of generated token dependence for vulnerability analysis. Our results demonstrate LEA’s ability to detect clear distinctions between no-retrieval, generic-retrieval, and ideal-retrieval scenarios. LEA offers security analysts with a metric to audit RAG-enhanced workflows, improving the transparent and trustworthy deployment of AI in cybersecurity threat analysis. 
 
 <p align="center">
   <img src="images/dependency_process.PNG" alt="LEA end‑to‑end pipeline"/>
 </p>
 
+
+For each CVE, we considered three distinct retrieval scenarios:
+
+Ideal retrieval: In this scenario, the LLM retrieves only the most relevant and verified information from the NVD website. This scenario serves as a benchmark to evaluate the LEA distribution under optimal retrieval conditions.
+
+Generic retrieval: Here, we assume that the LLM does not have knowledge of the specific CVE and instead returns generalized information about CVEs, as illustrated below \cite{redhat}:
+
+Failed retrieval: In this scenario, the LLM retrieves incorrect or misleading information, such as details from a non-existent CVE. For example, querying the model about CVE-2027-30066 (which does not exist) typically results in retrieval of CVEs sharing the same numeric suffix from other years.
 
 
 ## Setup
@@ -64,11 +73,18 @@ Essential knobs in **`configs/analysis.yaml`**:
 
 ## 📊 Visualising Distributions
 
-Generate LEA distributions by passing the path to the responses from all the LLMs (in the file):
+Generate LEA distributions by passing the path to the responses for all the LLMs (in the file):
 
 ```bash
 $ python3 lea_distribution.py
 ```
+
+Generate the scatter plots for the $A^{rag}$ distributions across different RAG scenarios by passing the path to the responses for all the LLMs (in the file):
+
+```bash
+$ python3 plot_rag_dist.py
+```
+
 
 ---
 
@@ -77,11 +93,11 @@ $ python3 lea_distribution.py
 ```text
 .
 ├── configs/           # YAML configs for generation & analysis
-├── data/              # Curated CVE dataset (100 rows)
+├── data/              # Curated CVE dataset (500 rows)
 │   └── cve_data.csv
 ├── results/
 │   └── Generation/
-│   └── LEA/          
+│   └── LEA/           
 ├── images/            # Diagrams & figures used in the paper
 └── *.py               # Entry points & core library
 ```

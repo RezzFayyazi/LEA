@@ -1,0 +1,206 @@
+{
+  "0": {
+    "percentages": {
+      "xy=True,x?y=True": 59.3,
+      "xy=True,x?y=False": 33.3,
+      "xy=False,x?y=False": 7.4
+    },
+    "token_deltas": [
+      "Token 150: ' stack' has ?p=1.0000 (p1=1.000, p2=0.000)",
+      "Token 152: 'based' has ?p=0.0039 (p1=1.000, p2=0.996)",
+      "Token 156: ' IBM' has ?p=1.0000 (p1=1.000, p2=0.000)",
+      "Token 157: ' Tiv' has ?p=0.8047 (p1=1.000, p2=0.197)",
+      "Token 159: ' Storage' has ?p=0.0117 (p1=1.000, p2=0.988)",
+      "Token 161: ' Fast' has ?p=1.0000 (p1=1.000, p2=0.000)",
+      "Token 162: 'Back' has ?p=0.1211 (p1=1.000, p2=0.879)",
+      "Token 167: ' send' has ?p=0.1270 (p1=0.445, p2=0.318)",
+      "Token 168: ' crafted' has ?p=0.6758 (p1=0.676, p2=0.001)",
+      "Token 169: ' input' has ?p=0.8047 (p1=0.879, p2=0.074)",
+      "Token 171: ' trigger' has ?p=0.9453 (p1=0.961, p2=0.014)",
+      "Token 173: ' overflow' has ?p=0.0156 (p1=1.000, p2=0.984)",
+      "Token 175: ' leading' has ?p=0.8516 (p1=0.855, p2=0.003)",
+      "Token 178: ' denial' has ?p=0.0938 (p1=0.996, p2=0.902)",
+      "Token 182: ' crashing' has ?p=0.0039 (p1=1.000, p2=0.996)",
+      "Token 184: ' Fast' has ?p=0.8438 (p1=0.871, p2=0.026)",
+      "Token 186: ' daemon' has ?p=0.9766 (p1=1.000, p2=0.022)",
+      "Token 189: ' specific' has ?p=0.9023 (p1=0.906, p2=0.002)",
+      "Token 190: ' input' has ?p=0.7109 (p1=0.930, p2=0.219)",
+      "Token 191: ' vector' has ?p=0.9492 (p1=1.000, p2=0.050)",
+      "Token 196: ' detailed' has ?p=0.0078 (p1=0.996, p2=0.988)",
+      "Token 198: ' requiring' has ?p=0.2773 (p1=0.871, p2=0.594)",
+      "Token 199: ' reverse' has ?p=0.0039 (p1=0.996, p2=0.992)",
+      "Token 200: ' engineering' has ?p=0.0078 (p1=0.996, p2=0.988)",
+      "Token 202: ' fully' has ?p=0.3223 (p1=0.406, p2=0.084)",
+      "Token 203: ' exploit' has ?p=0.0234 (p1=0.984, p2=0.961)",
+      "Token 205: '\\n' has ?p=0.9922 (p1=0.996, p2=0.005)"
+    ],
+    "independence_xy": [
+      "row  59: independent = True",
+      "row  61: independent = True",
+      "row  65: independent = True",
+      "row  66: independent = True",
+      "row  68: independent = True",
+      "row  70: independent = True",
+      "row  71: independent = True",
+      "row  76: independent = True",
+      "row  77: independent = True",
+      "row  78: independent = True",
+      "row  80: independent = True",
+      "row  82: independent = True",
+      "row  84: independent = True",
+      "row  87: independent = True",
+      "row  91: independent = True",
+      "row  93: independent = True",
+      "row  95: independent = True",
+      "row  98: independent = True",
+      "row  99: independent = True",
+      "row 100: independent = True",
+      "row 105: independent = True",
+      "row 107: independent = True",
+      "row 108: independent = True",
+      "row 109: independent = True",
+      "row 111: independent = True",
+      "row 112: independent = False",
+      "row 114: independent = False"
+    ],
+    "independence_x?y": [
+      "row 150: independent = True",
+      "row 152: independent = False",
+      "row 156: independent = False",
+      "row 157: independent = False",
+      "row 159: independent = False",
+      "row 161: independent = False",
+      "row 162: independent = False",
+      "row 167: independent = True",
+      "row 168: independent = True",
+      "row 169: independent = True",
+      "row 171: independent = True",
+      "row 173: independent = False",
+      "row 175: independent = True",
+      "row 178: independent = False",
+      "row 182: independent = True",
+      "row 184: independent = False",
+      "row 186: independent = True",
+      "row 189: independent = True",
+      "row 190: independent = True",
+      "row 191: independent = True",
+      "row 196: independent = True",
+      "row 198: independent = True",
+      "row 199: independent = True",
+      "row 200: independent = True",
+      "row 202: independent = True",
+      "row 203: independent = False",
+      "row 205: independent = False"
+    ],
+    "independence_pairs": [
+      [
+        true,
+        true
+      ],
+      [
+        true,
+        false
+      ],
+      [
+        true,
+        false
+      ],
+      [
+        true,
+        false
+      ],
+      [
+        true,
+        false
+      ],
+      [
+        true,
+        false
+      ],
+      [
+        true,
+        false
+      ],
+      [
+        true,
+        true
+      ],
+      [
+        true,
+        true
+      ],
+      [
+        true,
+        true
+      ],
+      [
+        true,
+        true
+      ],
+      [
+        true,
+        false
+      ],
+      [
+        true,
+        true
+      ],
+      [
+        true,
+        false
+      ],
+      [
+        true,
+        true
+      ],
+      [
+        true,
+        false
+      ],
+      [
+        true,
+        true
+      ],
+      [
+        true,
+        true
+      ],
+      [
+        true,
+        true
+      ],
+      [
+        true,
+        true
+      ],
+      [
+        true,
+        true
+      ],
+      [
+        true,
+        true
+      ],
+      [
+        true,
+        true
+      ],
+      [
+        true,
+        true
+      ],
+      [
+        true,
+        true
+      ],
+      [
+        false,
+        false
+      ],
+      [
+        false,
+        false
+      ]
+    ]
+  }
+}

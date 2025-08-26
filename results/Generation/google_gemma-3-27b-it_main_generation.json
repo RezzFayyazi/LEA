@@ -1,0 +1,10 @@
+[
+  {
+    "cve_id": "CVE-2016-0212",
+    "question": "You are a cybersecurity expert. How can an attacker exploit CVE-2016-0212? Do not be verbose and answer carefully.",
+    "model": "google/gemma-3-27b-it",
+    "base_response": "CVE-2016-0212 is a remote code execution vulnerability in Microsoft Windows due to the way the Graphics Component handles specially crafted fonts.\n\n**Exploitation:**\n\n1.  **Crafted Font:** An attacker creates a malicious TrueType or OpenType font file.\n2.  **Delivery:** The font is delivered to the target system (e.g., via website, email attachment, shared folder).\n3.  **Processing:** When the target system processes the font (e.g., opening a document containing it, previewing it in Explorer), the vulnerability is triggered.\n4.  **RCE:** The attacker gains remote code execution with SYSTEM privileges.\n\nThe vulnerability lies in a heap overflow during font parsing.\n",
+    "rag_response": "CVE-2016-0212 is a stack-based buffer overflow in IBM Tivoli Storage Manager FastBack. An attacker can send crafted input to trigger the overflow, leading to a denial of service by crashing the FastBack daemon. The specific input vector isn't publicly detailed, requiring reverse engineering to fully exploit.\n</Response>\n",
+    "rag_text": "Stack-based buffer overflow in IBM Tivoli Storage Manager FastBack 5.5 and 6.1.x through 6.1.11.1 allows remote attackers to cause a denial of service (daemon crash) via unspecified vectors, a different vulnerability than CVE-2016-0213 and CVE-2016-0216."
+  }
+]
