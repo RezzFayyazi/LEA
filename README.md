@@ -9,7 +9,7 @@ This work proposes LLM Embedding-based Attribution (LEA), an explainable metric 
 </p>
 
 
-For each CVE, we considered three distinct retrieval scenarios:
+For each CVE, LEA is applied on three different retrieval scenarios:
 
 Ideal retrieval: In this scenario, the LLM retrieves only the most relevant and verified information from the NVD website. This scenario serves as a benchmark to evaluate the LEA distribution under optimal retrieval conditions.
 
