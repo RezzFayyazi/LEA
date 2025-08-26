@@ -11,7 +11,7 @@ This work proposes LLM Embedding-based Attribution (LEA), an explainable metric 
 
 For each CVE, LEA is applied on three different retrieval scenarios:
 
-Ideal retrieval: In this scenario, the LLM retrieves only the most relevant and verified information from the NVD website. This scenario serves as a benchmark to evaluate the LEA distribution under optimal retrieval conditions.
+Valid retrieval: In this scenario, the LLM retrieves only the most relevant and verified information from the NVD website. This scenario serves as a benchmark to evaluate the LEA distribution under optimal retrieval conditions.
 
 Generic retrieval: Here, assume that the LLM does not have knowledge of the specific CVE and instead returns generalized information about CVEs, as illustrated below \cite{redhat}:
 
