@@ -2,20 +2,20 @@
 LLM Embedding-based Attribution (LEA): Quantifying Source Contributions to Generative Model's Response for Vulnerability Analysis
 
 ## Overview
-This work proposes LLM Embedding-based Attribution (LEA), an explainable metric to quantify the influence of internal knowledge compared to the retrieved content for model-generated responses. LEA is evaluated on 500 critical CVEs disclosed between 2016 and 2025 using three state-of-the-art LLMs. The development of LEA exposes layer-wise dependence and reveals where context influence is strongest. LEA offers security analysts with a metric to audit RAG-enhanced workflows, improving the transparent and trustworthy deployment of AI in cybersecurity threat analysis. 
+This work proposes LLM Embedding-based Attribution (LEA), an explainable metric to quantify the percentage of influence an LLM's pre-trained knowledge has versus retrieved context on its generated responses.
 
 <p align="center">
   <img src="images/dependency_process.PNG" alt="LEA end‑to‑end pipeline"/>
 </p>
 
 
-For each CVE, LEA is applied on three different retrieval scenarios:
+LEA is applied on vulnerability analysis task under three different retrieval scenarios:
 
-Valid retrieval: In this scenario, the LLM retrieves only the most relevant and verified information from the NVD website. This scenario serves as a benchmark to evaluate the LEA distribution under optimal retrieval conditions.
+Valid retrieval: The LLM uses only the most relevant and verified information, and serves as a benchmark to evaluate the LEA distribution under optimal retrieval conditions.
 
-Generic retrieval: Here, assume that the LLM does not have knowledge of the specific CVE and instead returns generalized information about CVEs, as illustrated below \cite{redhat}:
+Generic retrieval: The LLM does not have knowledge of the specific CVE and instead uses generalized information about a vulnerability.
 
-Incorrect retrieval: In this scenario, the LLM retrieves incorrect or misleading information, such as details from a non-existent CVE. For example, querying the model about CVE-2027-30066 (which does not exist) typically results in retrieval of CVEs sharing the same numeric suffix from other years.
+Incorrect retrieval: The LLM uses incorrect or misleading retrieved information, such as details from a non-existent vulnerability. 
 
 
 ## Setup
