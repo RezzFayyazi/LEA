@@ -118,3 +118,8 @@ All experiments in the paper were run on a workstation with:
 * 2 × **Intel Xeon E5‑2650** CPUs
 * 2 × **NVIDIA Tesla P40**
 * 1 × **NVIDIA Tesla V100**
+
+
+## Acknowledgments
+
+This material is based upon work supported by the National Science Foundation under Grant No. 2344237 and No. 2502341.
